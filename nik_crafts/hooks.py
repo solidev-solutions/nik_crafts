@@ -3,12 +3,12 @@ app_title = "NichtImKopf Crafts Community"
 app_publisher = "Solidev - Thomas Liska"
 app_description = "Business software for small craft businesses, built on ERPNext"
 app_email = "contact@solidev.solutions"
-app_license = "agpl-3.0"
+app_license = "agpl-3.0-or-later"
 
 # Apps
 # ------------------
 
-# required_apps = []
+required_apps = ["frappe/erpnext"]
 
 # Each item in the list will be shown as an app in the apps page
 # add_to_apps_screen = [
@@ -278,4 +278,3 @@ app_license = "agpl-3.0"
 # ------------
 # List of apps whose translatable strings should be excluded from this app's translations.
 # ignore_translatable_strings_from = []
-

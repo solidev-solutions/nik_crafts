@@ -1,0 +1,73 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - version-16
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  # release-notes-generator 14 cannot render version 10 of the conventionalcommits preset.
+  RELEASE_TOOLS: >-
+    semantic-release@25
+    @semantic-release/git@11
+    @semantic-release/exec@7
+    conventional-changelog-conventionalcommits@9
+
+jobs:
+  release:
+    name: Release
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    environment: release
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          # Only this key may push the version bump to the protected branch.
+          ssh-key: ${{ secrets.RELEASE_DEPLOY_KEY }}
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+
+      - name: Install semantic-release
+        run: npm install --no-save $RELEASE_TOOLS
+
+      - name: Create release
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: npx semantic-release
+
+  dry-run:
+    # Started by hand. Prints what a release from the chosen branch would publish.
+    name: Release Dry Run
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+
+      - name: Install semantic-release
+        run: npm install --no-save $RELEASE_TOOLS
+
+      - name: Dry run
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: npx semantic-release --dry-run --branches "$GITHUB_REF_NAME"
