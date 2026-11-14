@@ -71,6 +71,43 @@ repos:
                 nik_crafts/public/js/lib/.*
             )$
 
+  - repo: local
+    hooks:
+      - id: no-docs
+        name: "No documentation files"
+        language: fail
+        entry: "No docs/ folder. Markdown is limited to README.md, SECURITY.md, AGENTS.md, CLAUDE.md, issue and pull request templates, .claude/skills/ and notification templates."
+        files: '(?i)((^|/)docs/|\.(md|mdx|mdc|markdown|rst|adoc)$)'
+        exclude: '^(README|SECURITY|AGENTS|CLAUDE)\.md$|^\.github/(ISSUE_TEMPLATE/[^/]+|PULL_REQUEST_TEMPLATE/[^/]+|(?i:pull_request_template))\.md$|^\.claude/skills/|^nik_crafts/[^/]+/notification/[^/]+/[^/]+\.md$'
+
+      - id: no-local-stack
+        name: "No local stack files"
+        language: fail
+        entry: "The local Docker stack and machine settings stay outside this repository."
+        files: '(?i)(^|/)((docker-)?compose([.-][^/]+)?\.ya?ml|([^/]+\.)?(dockerfile|containerfile)([.-][^/]+)?|\.dockerignore|docker-bake(\.[^/]+)?\.(hcl|json)|\.devcontainer(/.*)?|\.?devcontainer\.json|\.env([.-][^/]*)?|\.envrc)$'
+        exclude: '^\.github/workflows/'
+
+      - id: doctype-prefix
+        name: "DocTypes carry the NC prefix"
+        language: fail
+        entry: "Own DocTypes start with NC, for example NC Time Entry."
+        files: '^nik_crafts/[^/]+/doctype/(?!nc_)[^/]+/'
+
+      - id: no-permission-bypass
+        name: "No permission bypass and no change of user outside tests"
+        language: pygrep
+        entry: 'ignore_\w*perm|\b(set_user|impersonate)\(|session\.user\s*=[^=]'
+        files: '^nik_crafts/.*\.py$'
+        exclude: '(^|/)test_[^/]*\.py$'
+
+      - id: check-fixtures
+        name: "The checks above match their fixtures"
+        language: python
+        additional_dependencies: [pyyaml]
+        entry: python .github/helper/test_checks.py
+        files: '^\.pre-commit-config\.yaml$|^\.github/helper/'
+        pass_filenames: false
+
 ci:
     autoupdate_schedule: weekly
     skip: []

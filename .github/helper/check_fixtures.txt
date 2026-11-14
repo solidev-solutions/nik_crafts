@@ -1,0 +1,113 @@
+# Examples for the repository's own checks in .pre-commit-config.yaml, read by test_checks.py.
+# Each line: the id of the check that must reject the text, or "ok", then the text.
+
+[paths]
+ok README.md
+ok SECURITY.md
+ok AGENTS.md
+ok CLAUDE.md
+ok license.txt
+ok pyproject.toml
+ok commitlint.config.js
+ok .editorconfig
+ok .envoy.yaml
+ok .claude/settings.json
+ok .claude/hooks/pre-commit-changed.sh
+ok .claude/skills/release/SKILL.md
+ok .github/ISSUE_TEMPLATE/bug_report.yaml
+ok .github/ISSUE_TEMPLATE/question.md
+ok .github/PULL_REQUEST_TEMPLATE.md
+ok .github/pull_request_template.md
+ok .github/PULL_REQUEST_TEMPLATE/feature.md
+ok .github/release/package.json
+ok .github/workflows/ci.yml
+ok .github/workflows/compose-check.yml
+ok .github/workflows/docker-compose-lint.yaml
+ok nik_crafts/hooks.py
+ok nik_crafts/public/js/environment.js
+ok nik_crafts/templates/pages/docs.html
+ok nik_crafts/utils/dockerfile_parser.py
+ok nik_crafts/crafts/report/composer/composer.py
+ok nik_crafts/crafts/notification/job_done/job_done.md
+ok nik_crafts/crafts/doctype/__init__.py
+ok nik_crafts/crafts/doctype/nc_time_entry/nc_time_entry.json
+ok nik_crafts/crafts/doctype/nc_time_entry/test_nc_time_entry.py
+no-docs docs/plan.md
+no-docs docs/index.html
+no-docs Docs/architecture.png
+no-docs nik_crafts/docs/guide.html
+no-docs CONTRIBUTING.md
+no-docs CHANGELOG.md
+no-docs CODE_OF_CONDUCT.md
+no-docs readme.md
+no-docs PLAN.MD
+no-docs notes.markdown
+no-docs design.rst
+no-docs spec.adoc
+no-docs rules.mdc
+no-docs page.mdx
+no-docs adr/0001-use-frappe.md
+no-docs .github/CONTRIBUTING.md
+no-docs .github/copilot-instructions.md
+no-docs .github/instructions/python.instructions.md
+no-docs .claude/commands/release.md
+no-docs .claude/agents/reviewer.md
+no-docs .cursor/rules/style.mdc
+no-docs nik_crafts/change_log/v1/v1_0_0.md
+no-docs nik_crafts/www/about.md
+no-docs nik_crafts/crafts/doctype/nc_time_entry/README.md
+no-docs nik_crafts/crafts/notification/job_done/extra/notes.md
+no-local-stack compose.yaml
+no-local-stack compose.yml
+no-local-stack compose.prod.yaml
+no-local-stack compose-dev.yml
+no-local-stack docker-compose.yml
+no-local-stack docker-compose.override.yml
+no-local-stack docker-compose-dev.yml
+no-local-stack deploy/compose.yaml
+no-local-stack Dockerfile
+no-local-stack dockerfile
+no-local-stack Dockerfile.dev
+no-local-stack Dockerfile-dev
+no-local-stack app.Dockerfile
+no-local-stack app.dockerfile
+no-local-stack docker/Containerfile
+no-local-stack .dockerignore
+no-local-stack docker-bake.hcl
+no-local-stack docker-bake.json
+no-local-stack docker-bake.override.hcl
+no-local-stack .devcontainer/devcontainer.json
+no-local-stack .devcontainer/Dockerfile
+no-local-stack .devcontainer.json
+no-local-stack devcontainer.json
+no-local-stack .env
+no-local-stack .env.local
+no-local-stack .env-local
+no-local-stack .env.example
+no-local-stack .envrc
+no-local-stack nik_crafts/.env
+doctype-prefix nik_crafts/crafts/doctype/time_entry/time_entry.json
+doctype-prefix nik_crafts/crafts/doctype/time_entry/__init__.py
+doctype-prefix nik_crafts/crafts/doctype/ncx_entry/ncx_entry.py
+doctype-prefix nik_crafts/crafts/doctype/NC_time/NC_time.json
+
+[lines]
+ok doc.insert()
+ok frappe.has_permission("Quotation", "write", throw=True)
+ok if frappe.session.user == "Administrator":
+ok if frappe.session.user != doc.owner:
+ok frappe.defaults.set_user_default("company", company)
+ok permission_query_conditions = {"NC Time Entry": "nik_crafts.permissions.query"}
+no-permission-bypass doc.insert(ignore_permissions=True)
+no-permission-bypass doc.flags.ignore_permissions = True
+no-permission-bypass frappe.flags.ignore_permissions = True
+no-permission-bypass frappe.get_list("Quotation", ignore_permissions=True)
+no-permission-bypass frappe.get_list("Quotation", ignore_user_permissions=True)
+no-permission-bypass frappe.share.add_docshare(doctype, name, user, flags={"ignore_share_permission": True})
+no-permission-bypass doc.flags.ignore_permlevel_for_fields = ["status"]
+no-permission-bypass frappe.get_print(doctype, name, ignore_print_permissions=True)
+no-permission-bypass link_options = search_widget(doctype, txt, ignore_select_perm=True)
+no-permission-bypass frappe.set_user("Administrator")
+no-permission-bypass frappe.local.login_manager.impersonate(user)
+no-permission-bypass frappe.session.user = "Administrator"
+no-permission-bypass frappe.local.session.user="Administrator"
