@@ -23,6 +23,7 @@ jobs:
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
     environment: release
+    concurrency: release
     permissions:
       contents: write
       issues: write
@@ -40,7 +41,7 @@ jobs:
           node-version: 24
 
       - name: Install semantic-release
-        run: npm install --no-save $RELEASE_TOOLS
+        run: npm install --no-save --ignore-scripts $RELEASE_TOOLS
 
       - name: Create release
         env:
@@ -48,7 +49,9 @@ jobs:
         run: npx semantic-release
 
   dry-run:
-    # Started by hand. Prints what a release from the chosen branch would publish.
+    # Started by hand. Prints what a release from the chosen branch would publish. Release tags
+    # live on version-16 only, so on any other branch the version is right only before the
+    # first release.
     name: Release Dry Run
     if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
@@ -65,7 +68,7 @@ jobs:
           node-version: 24
 
       - name: Install semantic-release
-        run: npm install --no-save $RELEASE_TOOLS
+        run: npm install --no-save --ignore-scripts $RELEASE_TOOLS
 
       - name: Dry run
         env:

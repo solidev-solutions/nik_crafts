@@ -119,3 +119,5 @@ jobs:
         run: |
           bench --site test_site uninstall-app nik_crafts --yes --no-backup
           bench --site test_site list-apps
+          # uninstall-app also exits with 0 when it refuses to remove the app
+          if bench --site test_site list-apps | grep -q nik_crafts; then exit 1; fi

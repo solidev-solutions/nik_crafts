@@ -26,8 +26,9 @@ jobs:
           node-version: 24
           check-latest: true
 
+      # The preset is the one the release reads commits with, see release.yml.
       - name: Install commitlint
-        run: npm install --no-save @commitlint/cli@21 @commitlint/config-conventional@21
+        run: npm install --no-save --ignore-scripts @commitlint/cli@21 conventional-changelog-conventionalcommits@9
 
       # A pull request is squashed into one commit on develop, and that commit takes its title.
       - name: Check pull request title
