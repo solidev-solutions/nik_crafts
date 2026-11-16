@@ -12,7 +12,7 @@ NichtImKopf Crafts Community (`nik_crafts`) is business software for craft busin
 
 - Make the smallest correct change. Do not reformat, rename or move code you did not need to touch.
 - Write code that needs no comment. Add one only where the code cannot say it itself: a reason that is not obvious, a limit, a workaround. No comments that narrate the change.
-- What a tool can check becomes a check in `.pre-commit-config.yaml`, not a sentence in a file. Reasoning belongs in the pull request.
+- What a tool can check becomes a check in `.pre-commit-config.yaml`, not a sentence in a file.
 - Everything in this repository is English. German reaches the interface through Frappe's translations.
 
 ## Commands
@@ -25,7 +25,7 @@ NichtImKopf Crafts Community (`nik_crafts`) is business software for craft busin
 ## Pull requests
 
 - Target `develop`. The title becomes the commit, so write it as one: `fix(quotation): keep the company on copy`.
-- The description says what changes and how it was checked: the commands that ran and what they showed, or "not run".
+- The description says in a few plain sentences what the change is about, and in one line what was checked or that nothing was. No lists, tables or links.
 - Commits and pull requests carry no AI attribution line.
 
 ## Never
