@@ -8,7 +8,7 @@ app_license = "agpl-3.0-or-later"
 # Apps
 # ------------------
 
-required_apps = ["frappe/erpnext"]
+required_apps = ["frappe/erpnext@version-16"]
 
 # Each item in the list will be shown as an app in the apps page
 # add_to_apps_screen = [
