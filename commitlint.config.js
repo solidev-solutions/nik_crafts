@@ -1,5 +1,7 @@
 module.exports = {
 	parserPreset: "conventional-changelog-conventionalcommits",
+	// By default commitlint lets titles such as "Revert ..." or "Merged ..." pass unchecked.
+	defaultIgnores: false,
 	rules: {
 		"subject-empty": [2, "never"],
 		"type-case": [2, "always", "lower-case"],
