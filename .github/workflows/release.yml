@@ -9,14 +9,6 @@ on:
 permissions:
   contents: read
 
-env:
-  # release-notes-generator 14 cannot render version 10 of the conventionalcommits preset.
-  RELEASE_TOOLS: >-
-    semantic-release@25
-    @semantic-release/git@11
-    @semantic-release/exec@7
-    conventional-changelog-conventionalcommits@9
-
 jobs:
   release:
     name: Release
@@ -47,13 +39,15 @@ jobs:
         with:
           node-version: 24
 
+      # The lockfile in .github/release fixes the version of every package that runs here.
       - name: Install semantic-release
-        run: npm install --no-save --ignore-scripts $RELEASE_TOOLS
+        working-directory: .github/release
+        run: npm ci --ignore-scripts
 
       - name: Create release
         env:
           GITHUB_TOKEN: ${{ github.token }}
-        run: npx semantic-release
+        run: .github/release/node_modules/.bin/semantic-release
 
   dry-run:
     # Started by hand. Prints what a release from the chosen branch would publish. Release tags
@@ -75,9 +69,10 @@ jobs:
           node-version: 24
 
       - name: Install semantic-release
-        run: npm install --no-save --ignore-scripts $RELEASE_TOOLS
+        working-directory: .github/release
+        run: npm ci --ignore-scripts
 
       - name: Dry run
         env:
           GITHUB_TOKEN: ${{ github.token }}
-        run: npx semantic-release --dry-run --branches "$GITHUB_REF_NAME"
+        run: .github/release/node_modules/.bin/semantic-release --dry-run --branches "$GITHUB_REF_NAME"
