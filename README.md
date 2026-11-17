@@ -9,28 +9,13 @@ This app needs [ERPNext](https://github.com/frappe/erpnext) version 16. You can 
 ```bash
 cd $PATH_TO_YOUR_BENCH
 bench get-app erpnext --branch version-16
-bench get-app https://github.com/solidev-solutions/nik_crafts --branch develop
+bench get-app https://github.com/solidev-solutions/nik_crafts --branch version-16
 bench install-app nik_crafts
 ```
 
-There is no release yet. Releases will be published on the `version-16` branch.
-
 ### Contributing
 
-This app uses `pre-commit` for code formatting and linting. Please [install pre-commit](https://pre-commit.com/#installation) and enable it for this repository:
-
-```bash
-cd apps/nik_crafts
-pre-commit install
-```
-
-Pre-commit is configured to use the following tools for checking and formatting your code:
-
-- ruff
-- eslint
-- prettier
-
-Pull requests target the `develop` branch. Their title follows [Conventional Commits](https://www.conventionalcommits.org/), for example `fix(quotation): keep the company on copy`.
+Pull requests target the `develop` branch. Run `pre-commit install` once, then the checks run on every commit.
 
 ### License
 
