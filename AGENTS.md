@@ -18,7 +18,7 @@ NichtImKopf Crafts Community (`nik_crafts`) is business software for craft busin
 ## Commands
 
 - Checks: `pre-commit run --files <changed files>`.
-- After changing a `uses:` line in a workflow: `gh actions-lock`.
+- After changing a `uses:` line in a workflow: `gh actions-lock`, from the gh extension `github/gh-actions-lock`.
 - Tests: `bench --site <site> run-tests --app nik_crafts`, or `--module <dotted.path>` for one module.
 - Run tests on a throwaway site. Site names, ports and credentials belong to your machine and never to this repository.
 
