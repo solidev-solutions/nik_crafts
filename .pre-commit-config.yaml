@@ -13,6 +13,8 @@ repos:
         files: "nik_crafts.*"
         exclude: ".*json$|.*txt$|.*csv|.*md|.*svg"
       - id: check-merge-conflict
+        # Without this the hook only looks while a merge is under way, so never in a pull request.
+        args: [--assume-in-merge]
       - id: check-ast
       - id: check-json
       - id: check-toml
