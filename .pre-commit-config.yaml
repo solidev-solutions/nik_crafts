@@ -71,6 +71,37 @@ repos:
                 nik_crafts/public/js/lib/.*
             )$
 
+  - repo: local
+    hooks:
+      - id: no-docs
+        name: "No documentation files"
+        language: fail
+        entry: "No docs/ folder. Markdown is limited to README.md, SECURITY.md, AGENTS.md, CLAUDE.md, .claude/skills/ and notification templates."
+        files: '^docs/|\.md$'
+        exclude: |
+            (?x)^(
+                (README|SECURITY|AGENTS|CLAUDE)\.md|
+                \.claude/skills/.*|
+                nik_crafts/[^/]+/notification/.*
+            )$
+
+      - id: no-local-stack
+        name: "No local stack files"
+        language: fail
+        entry: "The local Docker stack stays outside this repository."
+        files: |
+            (?x)(^|/)(
+                (docker-)?compose(\.[^/]+)?\.ya?ml|
+                Dockerfile(\.[^/]+)?|
+                \.devcontainer/.*
+            )$
+
+      - id: doctype-prefix
+        name: "DocTypes carry the NC prefix"
+        language: fail
+        entry: "Own DocTypes start with NC, for example NC Time Entry."
+        files: '^nik_crafts/[^/]+/doctype/(?!nc_)[^/]+/'
+
 ci:
     autoupdate_schedule: weekly
     skip: []
