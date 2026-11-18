@@ -53,13 +53,13 @@ repos:
 
 
   - repo: https://github.com/pre-commit/mirrors-eslint
-    rev: v10.14.0
+    rev: v10.15.0
     hooks:
       - id: eslint
         types_or: [javascript]
         args: ['--quiet']
         # eslint.config.js loads the last two packages.
-        additional_dependencies: ["eslint@10.14.0", "@eslint/js@10.0.1", "globals@17.14.0"]
+        additional_dependencies: ["eslint@10.15.0", "@eslint/js@10.0.1", "globals@17.14.0"]
         # Ignore any files that might contain jinja / bundles
         exclude: |
             (?x)^(
