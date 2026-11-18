@@ -18,8 +18,6 @@ concurrency:
 jobs:
   tests:
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
     name: Server
 
     env:
@@ -59,27 +57,6 @@ jobs:
           node-version: 24
           check-latest: true
 
-      - name: Cache pip
-        uses: actions/cache@v4.3.0
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/*requirements.txt', '**/pyproject.toml', '**/setup.py', '**/setup.cfg') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
-            ${{ runner.os }}-
-
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: 'echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT'
-
-      - uses: actions/cache@v4.3.0
-        id: yarn-cache
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-
       - name: Install MariaDB Client
         run: |
           sudo apt update
@@ -99,16 +76,12 @@ jobs:
           bench new-site --db-root-password root --admin-password admin test_site
           bench --site test_site install-app nik_crafts
           bench build
-        env:
-          CI: 'Yes'
 
       - name: Run Tests
         working-directory: /home/runner/frappe-bench
         run: |
           bench --site test_site set-config allow_tests true
           bench --site test_site run-tests --app nik_crafts
-        env:
-          TYPE: server
 
       - name: Migrate
         working-directory: /home/runner/frappe-bench
