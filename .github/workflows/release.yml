@@ -57,6 +57,7 @@ jobs:
     if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     permissions:
+      # semantic-release checks that it may push, in a dry run too.
       contents: write
 
     steps:
