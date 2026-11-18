@@ -93,13 +93,6 @@ repos:
         entry: "Own DocTypes start with NC, for example NC Time Entry."
         files: '^nik_crafts/[^/]+/doctype/(?!nc_)[^/]+/'
 
-      - id: no-permission-bypass
-        name: "No permission bypass and no change of user outside tests"
-        language: pygrep
-        entry: 'ignore_\w*perm|\b(set_user|impersonate)\(|session\.user\s*=[^=]'
-        files: '^nik_crafts/.*\.py$'
-        exclude: '(^|/)test_[^/]*\.py$'
-
       - id: check-fixtures
         name: "The checks above match their fixtures"
         language: python

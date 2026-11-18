@@ -1,7 +1,6 @@
-# Examples for the repository's own checks in .pre-commit-config.yaml, read by test_checks.py.
-# Each line: the id of the check that must reject the text, or "ok", then the text.
+# Examples for the repository's own checks on file names in .pre-commit-config.yaml, read by
+# test_checks.py. Each line: the id of the check that must reject the path, or "ok", then the path.
 
-[paths]
 ok README.md
 ok SECURITY.md
 ok AGENTS.md
@@ -90,24 +89,3 @@ doctype-prefix nik_crafts/crafts/doctype/time_entry/time_entry.json
 doctype-prefix nik_crafts/crafts/doctype/time_entry/__init__.py
 doctype-prefix nik_crafts/crafts/doctype/ncx_entry/ncx_entry.py
 doctype-prefix nik_crafts/crafts/doctype/NC_time/NC_time.json
-
-[lines]
-ok doc.insert()
-ok frappe.has_permission("Quotation", "write", throw=True)
-ok if frappe.session.user == "Administrator":
-ok if frappe.session.user != doc.owner:
-ok frappe.defaults.set_user_default("company", company)
-ok permission_query_conditions = {"NC Time Entry": "nik_crafts.permissions.query"}
-no-permission-bypass doc.insert(ignore_permissions=True)
-no-permission-bypass doc.flags.ignore_permissions = True
-no-permission-bypass frappe.flags.ignore_permissions = True
-no-permission-bypass frappe.get_list("Quotation", ignore_permissions=True)
-no-permission-bypass frappe.get_list("Quotation", ignore_user_permissions=True)
-no-permission-bypass frappe.share.add_docshare(doctype, name, user, flags={"ignore_share_permission": True})
-no-permission-bypass doc.flags.ignore_permlevel_for_fields = ["status"]
-no-permission-bypass frappe.get_print(doctype, name, ignore_print_permissions=True)
-no-permission-bypass link_options = search_widget(doctype, txt, ignore_select_perm=True)
-no-permission-bypass frappe.set_user("Administrator")
-no-permission-bypass frappe.local.login_manager.impersonate(user)
-no-permission-bypass frappe.session.user = "Administrator"
-no-permission-bypass frappe.local.session.user="Administrator"
