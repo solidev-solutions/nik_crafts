@@ -13,6 +13,8 @@ repos:
         files: "nik_crafts.*"
         exclude: ".*json$|.*txt$|.*csv|.*md|.*svg"
       - id: check-merge-conflict
+        # Search for conflict markers on every run. By default the hook only searches while git is merging.
+        args: [--assume-in-merge]
       - id: check-ast
       - id: check-json
       - id: check-toml
