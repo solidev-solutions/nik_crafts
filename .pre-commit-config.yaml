@@ -95,6 +95,8 @@ repos:
             (?x)(^|/)(
                 (docker-)?compose(\.[^/]+)?\.ya?ml|
                 Dockerfile(\.[^/]+)?|
+                Containerfile(\.[^/]+)?|
+                \.dockerignore|
                 \.devcontainer/.*
             )$
 
