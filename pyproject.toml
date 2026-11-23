@@ -42,6 +42,14 @@ select = [
     "UP",
     "B",
     "RUF",
+    "C901",
+    "PLR0912",
+    "PLR0915",
+    "ARG",
+    "ERA001",
+    "PIE790",
+    "PGH003",
+    "PGH004",
 ]
 ignore = [
     "B017", # assertRaises(Exception) - should be more specific
@@ -52,7 +60,6 @@ ignore = [
     "E402", # module level import not at top of file
     "E501", # line too long
     "E741", # ambiguous variable name
-    "F401", # "unused" imports
     "F403", # can't detect undefined names from * import
     "F405", # can't detect undefined names from * import
     "F722", # syntax error in forward type annotation
