@@ -58,3 +58,6 @@ jspm_packages/
 .claude/settings.local.json
 .claude/worktrees/
 CLAUDE.local.md
+
+# mutmut
+mutants/

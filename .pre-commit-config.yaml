@@ -108,6 +108,12 @@ repos:
         entry: "Own DocTypes start with NC, for example NC Time Entry."
         files: '^nik_crafts/[^/]+/doctype/(?!nc_)[^/]+/'
 
+      - id: no-doctype-tests
+        name: "No tests in DocType folders"
+        language: fail
+        entry: "A test in the folder of a DocType makes Frappe create ERPNext's test data on the site. Test the controller through application/ or api/."
+        files: '^nik_crafts/[^/]+/doctype/[^/]+/(.+/)?test_[^/]+\.py$'
+
       - id: feature-places
         name: "Feature code lives in doctype/, api/, hooks/, application/, domain/, repositories/ or contract.py"
         language: pygrep
