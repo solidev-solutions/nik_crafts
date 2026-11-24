@@ -49,6 +49,9 @@ select = [
     "RUF",
     "INP",
     "TID251",
+    "BLE001",
+    "S110",
+    "S112",
 ]
 ignore = [
     "B017", # assertRaises(Exception) - should be more specific
