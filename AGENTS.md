@@ -22,6 +22,7 @@ NichtImKopf Crafts Community (`nik_crafts`) is business software for craft busin
 - `contract.py` hands out plain values and models from `domain/`, never Frappe documents.
 - Reading, saving and deleting a record never get an endpoint of their own.
 - A feature names neither the DocType nor the module path of another feature as a string. It goes through that feature's `contract.py`.
+- The allowed file types in `nc_core/start_data/settings.json` are a starting point. A feature that takes another type adds it there, and once a release has shipped the list, also a patch that adds it where the shipped list still stands.
 
 ## Commands
 
