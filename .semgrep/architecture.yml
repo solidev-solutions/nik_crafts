@@ -332,7 +332,7 @@ rules:
     languages: [python]
     severity: HIGH
     message: >-
-      An own endpoint is a function under @frappe.whitelist() that checks a right of its caller before
+      An own endpoint is a function under @frappe.whitelist(...) that checks a right of its caller before
       it does anything: frappe.has_permission(..., throw=True), without a user, is its first statement.
     pattern-either:
       - patterns:
@@ -444,3 +444,19 @@ rules:
     paths:
       exclude:
         - test_*.py
+
+  - id: endpoint-names-methods
+    languages: [python]
+    severity: HIGH
+    message: >-
+      An own endpoint and a whitelisted controller method name their one HTTP method in the one form this
+      rule reads: the keyword methods with a list that holds it, methods=["POST"] or methods=["GET"].
+      POST is for anything that changes data, for a read that takes a list, and for a controller method a
+      form script calls, because frm.call sends POST. GET is for any other read. The reason: without
+      methods Frappe also accepts GET, and what a GET request writes is rolled back without an error.
+    # The name is matched and not the call, so whitelist handed on without a call is reported too.
+    # Not seen: whitelist that reaches a file through an own module which imported it from frappe.
+    patterns:
+      - pattern: frappe.whitelist
+      - pattern-not-inside: frappe.whitelist(..., methods=["GET"], ...)
+      - pattern-not-inside: frappe.whitelist(..., methods=["POST"], ...)

@@ -12,6 +12,7 @@ class TestSetup(IntegrationTestCase):
 
 		self.assertEqual(frappe.db.get_single_value("System Settings", "date_format"), "dd.mm.yyyy")
 		self.assertEqual(frappe.db.get_single_value("System Settings", "number_format"), "#.###,##")
+		self.assertFalse(frappe.db.get_single_value("System Settings", "allow_error_traceback"))
 		self.assertTrue(frappe.db.get_single_value("Accounts Settings", "enable_immutable_ledger"))
 		self.assertEqual(default_templates(company), ["Umsatzsteuer 20 %", "Vorsteuer 20 %"])
 

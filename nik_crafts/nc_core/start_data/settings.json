@@ -1,5 +1,8 @@
 {
  "Accounts Settings": {
   "enable_immutable_ledger": 1
+ },
+ "System Settings": {
+  "allow_error_traceback": 0
  }
 }
