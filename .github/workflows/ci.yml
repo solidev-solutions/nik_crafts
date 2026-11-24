@@ -7,6 +7,7 @@ on:
   pull_request:
   schedule:
     - cron: '30 2 * * *'
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -77,6 +78,12 @@ jobs:
           bench --site test_site install-app nik_crafts
           bench build
 
+      - name: Validate Dependencies
+        # The version number of ERPNext on version-16-hotfix lags behind its releases.
+        if: env.UPSTREAM_BRANCH == 'version-16'
+        working-directory: /home/runner/frappe-bench
+        run: bench validate-dependencies
+
       - name: Run Tests
         working-directory: /home/runner/frappe-bench
         run: |
@@ -94,3 +101,58 @@ jobs:
           bench --site test_site list-apps
           # uninstall-app also exits with 0 when it refuses to remove the app
           if bench --site test_site list-apps | grep -q nik_crafts; then exit 1; fi
+
+  image:
+    # The build takes about 20 minutes and clones the app by branch from GitHub, which a pull request does not have.
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    name: Image
+    timeout-minutes: 60
+
+    env:
+      # Read by docker compose and by the compose files of frappe_docker
+      COMPOSE_FILE: compose.yaml:overrides/compose.mariadb.yaml:overrides/compose.redis.yaml:overrides/compose.noproxy.yaml
+      CUSTOM_IMAGE: nik_crafts
+      CUSTOM_TAG: nightly
+      PULL_POLICY: never
+      DB_PASSWORD: root
+
+    steps:
+      - name: Clone frappe_docker
+        uses: actions/checkout@v7.0.1
+        with:
+          repository: frappe/frappe_docker
+          persist-credentials: false
+
+      - name: Build
+        env:
+          # frappe_docker publishes its base images for version-16 only, not for version-16-hotfix.
+          FRAPPE_BRANCH: version-16
+          APPS_JSON: |
+            [
+              {"url": "https://github.com/frappe/erpnext", "branch": "version-16"},
+              {"url": "${{ github.server_url }}/${{ github.repository }}", "branch": "${{ github.ref_name }}"}
+            ]
+        run: |
+          printf '%s' "$APPS_JSON" > apps.json
+          docker build \
+            --build-arg=FRAPPE_PATH=https://github.com/frappe/frappe \
+            --build-arg=FRAPPE_BRANCH="$FRAPPE_BRANCH" \
+            --secret=id=apps_json,src=apps.json \
+            --tag="$CUSTOM_IMAGE:$CUSTOM_TAG" \
+            --file=images/layered/Containerfile .
+
+      - name: Create Site
+        run: |
+          docker compose up -d
+          docker compose exec -T backend bench new-site nightly.localhost --mariadb-user-host-login-scope='%' --db-root-password "$DB_PASSWORD" --admin-password admin --install-app nik_crafts
+
+      - name: Print PDF
+        run: |
+          curl -fsS --retry 5 -c cookies.txt -d usr=Administrator -d pwd=admin http://nightly.localhost:8080/api/method/login
+          curl -fsS -b cookies.txt -o user.pdf 'http://nightly.localhost:8080/api/method/frappe.utils.print_format.download_pdf?doctype=User&name=Administrator&pdf_generator=chrome'
+          file user.pdf | grep PDF
+
+      - name: Show Logs
+        if: failure()
+        run: docker compose logs
