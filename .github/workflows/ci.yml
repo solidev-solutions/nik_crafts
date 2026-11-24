@@ -77,6 +77,16 @@ jobs:
           bench --site test_site install-app nik_crafts
           bench build
 
+      - name: Translations match the code
+        # Our texts leave out what the released upstream has, so they are compared against that release only.
+        if: env.UPSTREAM_BRANCH == 'version-16'
+        working-directory: /home/runner/frappe-bench
+        run: |
+          bench generate-pot-file --app nik_crafts
+          bench update-po-files --app nik_crafts --locale de
+          # Moved lines and what Babel writes into the header are no change of a text.
+          git -C apps/nik_crafts diff --exit-code -I'^#: ' -I'^# ' -I'^"(POT-Creation|PO-Revision)-Date: ' -I'^"Generated-By: ' -- nik_crafts/locale
+
       - name: Run Tests
         working-directory: /home/runner/frappe-bench
         run: |

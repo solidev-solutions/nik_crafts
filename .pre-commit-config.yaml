@@ -146,6 +146,7 @@ repos:
                 nik_crafts/nc_[^/]+/repositories/.*|
                 nik_crafts/nc_core/.*|
                 nik_crafts/patches/.*|
+                nik_crafts/tests/.*|
                 (.*/)?test_[^/]*\.py
             )$
 
@@ -195,6 +196,23 @@ repos:
         args: [--test, --strict, --metrics=off, --config=.semgrep/architecture.yml, .semgrep/architecture.py]
         files: '^\.semgrep/'
         pass_filenames: false
+
+  # Neither tool publishes a pre-commit hook, so both are installed from PyPI.
+  - repo: local
+    hooks:
+      - id: polint
+        name: "Translations: every text is German"
+        language: python
+        additional_dependencies: ["polint==0.5"]
+        entry: polint --ignore=location,unsorted
+        files: '^nik_crafts/locale/de\.po$'
+
+      - id: dennis
+        name: "Translations: placeholders are kept"
+        language: python
+        additional_dependencies: ["dennis==1.3.0"]
+        entry: dennis-cmd lint --strict --rules E201,W202
+        files: '^nik_crafts/locale/de\.po$'
 
 ci:
     autoupdate_schedule: weekly

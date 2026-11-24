@@ -86,8 +86,9 @@ name = "Features stay apart and build on nc_core, nc_core builds on engine"
 type = "layers"
 containers = ["nik_crafts"]
 # The feature modules stand in one line between patches and nc_core: "nc_projects | nc_times".
-# patches lies on top: the rules for data access and for a bypass leave it out, so nothing imports it.
+# tests and patches lie on top: the rules for data access and for a bypass leave both out, so nothing imports them.
 layers = [
+    "tests",
     "patches",
     "(nc_core)",
     "(engine)",
@@ -100,7 +101,7 @@ exhaustive_ignores = [
 ]
 ignore_imports = ["nik_crafts.** -> nik_crafts.*.contract"]
 unmatched_ignore_imports_alerting = "none"
-broken_contract_guidance = "A feature reaches another feature only through its contract.py, and nothing imports a patch. Every feature module is listed in the line of layers above nc_core."
+broken_contract_guidance = "A feature reaches another feature only through its contract.py, and nothing imports a patch or the tests package. Every feature module is listed in the line of layers above nc_core."
 
 [[tool.importlinter.contracts]]
 name = "Inside a module imports point downwards"

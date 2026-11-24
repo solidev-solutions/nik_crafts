@@ -68,6 +68,7 @@ rules:
         - /nik_crafts/nc_core
         - /nik_crafts/patches
         - test_*.py
+        - /nik_crafts/tests
 
   - id: erpnext-through-documents
     languages: [python]
@@ -200,6 +201,7 @@ rules:
       exclude:
         - /nik_crafts/patches
         - test_*.py
+        - /nik_crafts/tests
 
   - id: validation-bypass
     languages: [python]
@@ -295,6 +297,7 @@ rules:
       exclude:
         - /nik_crafts/patches
         - test_*.py
+        - /nik_crafts/tests
 
   - id: manual-rollback
     languages: [python]
@@ -311,6 +314,7 @@ rules:
       exclude:
         - /nik_crafts/patches
         - test_*.py
+        - /nik_crafts/tests
 
   - id: rights-in-role-table
     languages: [python]
@@ -322,6 +326,7 @@ rules:
     paths:
       exclude:
         - test_*.py
+        - /nik_crafts/tests
 
   - id: endpoint-checks-permission
     languages: [python]
