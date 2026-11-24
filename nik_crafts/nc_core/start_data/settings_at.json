@@ -1,0 +1,7 @@
+{
+ "System Settings": {
+  "date_format": "dd.mm.yyyy",
+  "number_format": "#.###,##",
+  "first_day_of_the_week": "Monday"
+ }
+}

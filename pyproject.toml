@@ -77,9 +77,9 @@ docstring-code-format = true
 root_package = "nik_crafts"
 include_external_packages = true
 
-# As a source, nc_core and engine are named with a wildcard, because import-linter stops at a module
+# As a source, engine is named with a wildcard, because import-linter stops at a module
 # that does not exist yet. The wildcard covers what lies inside the package, not its own __init__.py.
-# The pull request that creates one of the two packages names it without the wildcard.
+# The pull request that creates the package names it without the wildcard.
 
 [[tool.importlinter.contracts]]
 name = "Features stay apart and build on nc_core, nc_core builds on engine"
@@ -139,7 +139,7 @@ broken_contract_guidance = "Ask nc_core/erpnext/ for the value. It returns plain
 [[tool.importlinter.contracts]]
 name = "Shared code does not know features"
 type = "forbidden"
-source_modules = ["nik_crafts.nc_core.**", "nik_crafts.engine.**"]
+source_modules = ["nik_crafts.nc_core", "nik_crafts.engine.**"]
 forbidden_modules = ["nik_crafts.*.contract"]
 broken_contract_guidance = "Shared code never calls a feature. Pass the value in, or move the code into the feature."
 

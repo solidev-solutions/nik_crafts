@@ -7,7 +7,11 @@ app_license = "agpl-3.0-or-later"
 
 required_apps = ["frappe/erpnext@version-16"]
 
+after_install = "nik_crafts.nc_core.setup.after_install"
 after_uninstall = "frappe.core.doctype.scheduled_job_type.scheduled_job_type.sync_jobs"
+setup_wizard_stages = "nik_crafts.nc_core.setup.stages"
+
+doc_events = {"Company": {"on_update": "nik_crafts.nc_core.setup.on_company_update"}}
 
 before_tests = "nik_crafts.tests.sample.load"
 

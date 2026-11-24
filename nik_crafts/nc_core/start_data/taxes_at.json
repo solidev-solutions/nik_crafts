@@ -1,0 +1,200 @@
+{
+ "chart_of_accounts": {
+  "Standard with Numbers": {
+   "sales_tax_templates": [
+    {
+     "title": "Umsatzsteuer 20 %",
+     "is_default": 1,
+     "taxes": [
+      {
+       "account_head": {
+        "account_name": "Umsatzsteuer 20 %",
+        "account_number": "2320",
+        "account_category": "Current Tax Liabilities",
+        "tax_rate": 20.0
+       },
+       "description": "Umsatzsteuer 20 %",
+       "rate": 20.0
+      }
+     ]
+    },
+    {
+     "title": "Umsatzsteuer 13 %",
+     "taxes": [
+      {
+       "account_head": {
+        "account_name": "Umsatzsteuer 13 %",
+        "account_number": "2330",
+        "account_category": "Current Tax Liabilities",
+        "tax_rate": 13.0
+       },
+       "description": "Umsatzsteuer 13 %",
+       "rate": 13.0
+      }
+     ]
+    },
+    {
+     "title": "Umsatzsteuer 10 %",
+     "taxes": [
+      {
+       "account_head": {
+        "account_name": "Umsatzsteuer 10 %",
+        "account_number": "2340",
+        "account_category": "Current Tax Liabilities",
+        "tax_rate": 10.0
+       },
+       "description": "Umsatzsteuer 10 %",
+       "rate": 10.0
+      }
+     ]
+    }
+   ],
+   "purchase_tax_templates": [
+    {
+     "title": "Vorsteuer 20 %",
+     "is_default": 1,
+     "taxes": [
+      {
+       "account_head": {
+        "account_name": "Vorsteuer 20 %",
+        "account_number": "1520",
+        "root_type": "Asset",
+        "account_category": "Other Current Assets",
+        "tax_rate": 20.0
+       },
+       "description": "Vorsteuer 20 %",
+       "rate": 20.0
+      }
+     ]
+    },
+    {
+     "title": "Vorsteuer 13 %",
+     "taxes": [
+      {
+       "account_head": {
+        "account_name": "Vorsteuer 13 %",
+        "account_number": "1530",
+        "root_type": "Asset",
+        "account_category": "Other Current Assets",
+        "tax_rate": 13.0
+       },
+       "description": "Vorsteuer 13 %",
+       "rate": 13.0
+      }
+     ]
+    },
+    {
+     "title": "Vorsteuer 10 %",
+     "taxes": [
+      {
+       "account_head": {
+        "account_name": "Vorsteuer 10 %",
+        "account_number": "1540",
+        "root_type": "Asset",
+        "account_category": "Other Current Assets",
+        "tax_rate": 10.0
+       },
+       "description": "Vorsteuer 10 %",
+       "rate": 10.0
+      }
+     ]
+    }
+   ]
+  },
+  "*": {
+   "sales_tax_templates": [
+    {
+     "title": "Umsatzsteuer 20 %",
+     "is_default": 1,
+     "taxes": [
+      {
+       "account_head": {
+        "account_name": "Umsatzsteuer 20 %",
+        "account_category": "Current Tax Liabilities",
+        "tax_rate": 20.0
+       },
+       "description": "Umsatzsteuer 20 %",
+       "rate": 20.0
+      }
+     ]
+    },
+    {
+     "title": "Umsatzsteuer 13 %",
+     "taxes": [
+      {
+       "account_head": {
+        "account_name": "Umsatzsteuer 13 %",
+        "account_category": "Current Tax Liabilities",
+        "tax_rate": 13.0
+       },
+       "description": "Umsatzsteuer 13 %",
+       "rate": 13.0
+      }
+     ]
+    },
+    {
+     "title": "Umsatzsteuer 10 %",
+     "taxes": [
+      {
+       "account_head": {
+        "account_name": "Umsatzsteuer 10 %",
+        "account_category": "Current Tax Liabilities",
+        "tax_rate": 10.0
+       },
+       "description": "Umsatzsteuer 10 %",
+       "rate": 10.0
+      }
+     ]
+    }
+   ],
+   "purchase_tax_templates": [
+    {
+     "title": "Vorsteuer 20 %",
+     "is_default": 1,
+     "taxes": [
+      {
+       "account_head": {
+        "account_name": "Vorsteuer 20 %",
+        "root_type": "Asset",
+        "account_category": "Other Current Assets",
+        "tax_rate": 20.0
+       },
+       "description": "Vorsteuer 20 %",
+       "rate": 20.0
+      }
+     ]
+    },
+    {
+     "title": "Vorsteuer 13 %",
+     "taxes": [
+      {
+       "account_head": {
+        "account_name": "Vorsteuer 13 %",
+        "root_type": "Asset",
+        "account_category": "Other Current Assets",
+        "tax_rate": 13.0
+       },
+       "description": "Vorsteuer 13 %",
+       "rate": 13.0
+      }
+     ]
+    },
+    {
+     "title": "Vorsteuer 10 %",
+     "taxes": [
+      {
+       "account_head": {
+        "account_name": "Vorsteuer 10 %",
+        "root_type": "Asset",
+        "account_category": "Other Current Assets",
+        "tax_rate": 10.0
+       },
+       "description": "Vorsteuer 10 %",
+       "rate": 10.0
+      }
+     ]
+    }
+   ]
+  }
+ }
+}

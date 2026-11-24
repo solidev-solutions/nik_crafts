@@ -18,7 +18,13 @@ concurrency:
 jobs:
   tests:
     runs-on: ubuntu-latest
-    name: Server
+    name: ${{ matrix.hrms && 'Server with HRMS' || 'Server' }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        # A business may install HRMS next to the app. The nightly run checks that both live together.
+        hrms: ${{ fromJSON((github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && '[false, true]' || '[false]') }}
 
     env:
       # Frappe and ERPNext cut each weekly release from version-16-hotfix. The nightly run
@@ -76,6 +82,13 @@ jobs:
           bench new-site --db-root-password root --admin-password admin test_site
           bench --site test_site install-app nik_crafts
           bench build
+
+      - name: Install HRMS
+        if: matrix.hrms
+        working-directory: /home/runner/frappe-bench
+        run: |
+          bench get-app hrms --branch "$UPSTREAM_BRANCH" --skip-assets
+          bench --site test_site install-app hrms
 
       - name: Translations match the code
         # Our texts leave out what the released upstream has, so they are compared against that release only.

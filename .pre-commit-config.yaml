@@ -17,6 +17,8 @@ repos:
         args: [--assume-in-merge]
       - id: check-ast
       - id: check-json
+        # A rule test carries its annotations as comments.
+        exclude: '^\.semgrep/'
       - id: check-toml
       - id: check-yaml
       - id: debug-statements
@@ -168,6 +170,7 @@ repos:
         # semgrep stays out of --quiet, which also hides why the rules could not be loaded.
         args:
           - --config=.semgrep/architecture.yml
+          - --config=.semgrep/doctypes.yml
           - --config=r/python.lang.correctness
           - --config=https://raw.githubusercontent.com/frappe/semgrep-rules/81a6e3d47a328249e8ddf04c586e493dd5553002/rules/code_quality.yml
           - --config=https://raw.githubusercontent.com/frappe/semgrep-rules/81a6e3d47a328249e8ddf04c586e493dd5553002/rules/frappe_correctness.yml
@@ -194,6 +197,13 @@ repos:
         alias: semgrep-rule-tests
         name: "The rules of the architecture catch what they should"
         args: [--test, --strict, --metrics=off, --config=.semgrep/architecture.yml, .semgrep/architecture.py]
+        files: '^\.semgrep/'
+        pass_filenames: false
+
+      - id: semgrep
+        alias: semgrep-doctype-rule-tests
+        name: "The rules for DocTypes catch what they should"
+        args: [--test, --strict, --metrics=off, --config=.semgrep/doctypes.yml, .semgrep/doctypes.json]
         files: '^\.semgrep/'
         pass_filenames: false
 

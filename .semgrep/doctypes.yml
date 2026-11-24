@@ -1,0 +1,37 @@
+# An own DocType that is exempt from a rule is listed under that rule's paths.exclude, with its reason
+# in a comment. A DocType file is written by Frappe and has no room for a comment of its own.
+rules:
+  - id: doctype-names-its-company
+    languages: [json]
+    severity: HIGH
+    message: >-
+      An own DocType holds the records of one company: it has the mandatory link field company,
+      so that a user permission on a company reaches it.
+    patterns:
+      - pattern: '{..., "doctype": "DocType", ...}'
+      - pattern-not: '{..., "istable": 1, ...}'
+      - pattern-not: '{..., "issingle": 1, ...}'
+      - pattern-not: >-
+          {..., "fields": [..., {..., "fieldname": "company", "fieldtype": "Link", "options": "Company", "reqd": 1, ...}, ...], ...}
+
+  - id: doctype-tracks-changes
+    languages: [json]
+    severity: HIGH
+    message: >-
+      An own DocType keeps its change log from the start: turned on later, it does not bring back
+      what changed before. Tick "Track Changes".
+    patterns:
+      - pattern: '{..., "doctype": "DocType", ...}'
+      - pattern-not: '{..., "istable": 1, ...}'
+      - pattern-not: '{..., "track_changes": 1, ...}'
+
+  - id: employee-link-says-what-it-is
+    languages: [json]
+    severity: HIGH
+    message: >-
+      A user permission on one's own employee restricts every link to Employee. A link that only
+      names a colleague ticks "Ignore User Permissions". A link that belongs to the person is listed
+      with its reason under this rule's paths.exclude.
+    patterns:
+      - pattern: '{..., "fieldtype": "Link", "options": "Employee", ...}'
+      - pattern-not: '{..., "ignore_user_permissions": 1, ...}'
