@@ -106,6 +106,96 @@ repos:
         entry: "Own DocTypes start with NC, for example NC Time Entry."
         files: '^nik_crafts/[^/]+/doctype/(?!nc_)[^/]+/'
 
+      - id: feature-places
+        name: "Feature code lives in doctype/, api/, hooks/, application/, domain/, repositories/ or contract.py"
+        language: pygrep
+        # The pattern also lets through the folders Frappe generates code in. A file without code may
+        # lie anywhere: Frappe puts an empty __init__.py into every folder it exports to.
+        entry: '\S'
+        args: [--multiline]
+        files: '^nik_crafts/nc_(?!core/)[^/]+/(?!(doctype|api|hooks|application|domain|repositories|report|page|dashboard_chart_source|web_form|notification)/)(?!contract\.py$)'
+        types: [python]
+
+      - id: shared-packages-start-empty
+        name: "engine/ and nc_core/ keep an empty __init__.py"
+        language: pygrep
+        # The import contracts name both packages with a wildcard, which leaves out this file.
+        entry: '\S'
+        args: [--multiline]
+        files: '^nik_crafts/(engine|nc_core)/__init__\.py$'
+
+      - id: exceptions-carry-a-reason
+        name: "An exception is a line of its own above the finding: # nosemgrep: <rule> -- <why it is needed>"
+        language: pygrep
+        # semgrep reads " nosem" on the line of a finding and at the start of the line above it, in any
+        # case, and takes the first word after every comma for a rule. So only one form passes: alone on
+        # its line, where ruff format leaves it, in lower case, where `git grep nosemgrep` finds it, and
+        # with a reason of two words or more that has no comma.
+        entry: '^(?!\s*(#|//) nosemgrep: [\w.-]+(, [\w.-]+)* -- [^\s,]+ [^,]*[^\s,]$)(?i:[^a-zA-Z0-9]*nosem|.* nosem)'
+        types_or: [python, pyi, javascript, jsx, ts, tsx, json]
+
+      - id: bypass-in-repositories
+        name: "A bypass stands in repositories/ or nc_core/"
+        language: pygrep
+        entry: 'nosemgrep: ([\w.-]+, )*[\w.-]*(permission-bypass|validation-bypass|manual-rollback|erpnext-through-documents|frappe-setuser|frappe-manual-commit)\b'
+        files: '^nik_crafts/'
+        types_or: [python, pyi]
+        # Patches and tests may bypass too.
+        exclude: |
+            (?x)^(
+                nik_crafts/nc_[^/]+/repositories/.*|
+                nik_crafts/nc_core/.*|
+                nik_crafts/patches/.*|
+                (.*/)?test_[^/]*\.py
+            )$
+
+      # import-linter's own hook expects the tool on the machine, so pre-commit installs it here.
+      - id: import-linter
+        name: "Imports follow the architecture"
+        language: python
+        entry: lint-imports
+        additional_dependencies: ["import-linter==2.16"]
+        pass_filenames: false
+        types_or: [python, toml]
+
+  - repo: https://github.com/semgrep/pre-commit
+    rev: v1.185.0
+    hooks:
+      - id: semgrep
+        name: "Rules of the architecture, of Frappe and of semgrep"
+        # Frappe publishes its rules only as files of a repository, so each file is named at one commit.
+        # semgrep stays out of --quiet, which also hides why the rules could not be loaded.
+        args:
+          - --config=.semgrep/architecture.yml
+          - --config=r/python.lang.correctness
+          - --config=https://raw.githubusercontent.com/frappe/semgrep-rules/81a6e3d47a328249e8ddf04c586e493dd5553002/rules/code_quality.yml
+          - --config=https://raw.githubusercontent.com/frappe/semgrep-rules/81a6e3d47a328249e8ddf04c586e493dd5553002/rules/frappe_correctness.yml
+          - --config=https://raw.githubusercontent.com/frappe/semgrep-rules/81a6e3d47a328249e8ddf04c586e493dd5553002/rules/hooks.yml
+          - --config=https://raw.githubusercontent.com/frappe/semgrep-rules/81a6e3d47a328249e8ddf04c586e493dd5553002/rules/report.yml
+          - --config=https://raw.githubusercontent.com/frappe/semgrep-rules/81a6e3d47a328249e8ddf04c586e493dd5553002/rules/translate.yml
+          - --config=https://raw.githubusercontent.com/frappe/semgrep-rules/81a6e3d47a328249e8ddf04c586e493dd5553002/rules/ux.yml
+          - --config=https://raw.githubusercontent.com/frappe/semgrep-rules/81a6e3d47a328249e8ddf04c586e493dd5553002/rules/security/authorization.yml
+          - --config=https://raw.githubusercontent.com/frappe/semgrep-rules/81a6e3d47a328249e8ddf04c586e493dd5553002/rules/security/filesystem.yml
+          - --config=https://raw.githubusercontent.com/frappe/semgrep-rules/81a6e3d47a328249e8ddf04c586e493dd5553002/rules/security/format_string_injection.yml
+          - --config=https://raw.githubusercontent.com/frappe/semgrep-rules/81a6e3d47a328249e8ddf04c586e493dd5553002/rules/security/rce.yml
+          - --config=https://raw.githubusercontent.com/frappe/semgrep-rules/81a6e3d47a328249e8ddf04c586e493dd5553002/rules/security/sql.yml
+          - --config=https://raw.githubusercontent.com/frappe/semgrep-rules/81a6e3d47a328249e8ddf04c586e493dd5553002/rules/security/whitelisted.yml
+          - --error
+          - --metrics=off
+          - --disable-version-check
+          - --skip-unknown-extensions
+        # The file types the rules above read. One process loads the rules once.
+        types_or: [python, pyi, javascript, jsx, ts, tsx, json]
+        require_serial: true
+        exclude: '^\.semgrep/'
+
+      - id: semgrep
+        alias: semgrep-rule-tests
+        name: "The rules of the architecture catch what they should"
+        args: [--test, --strict, --metrics=off, --config=.semgrep/architecture.yml, .semgrep/architecture.py]
+        files: '^\.semgrep/'
+        pass_filenames: false
+
 ci:
     autoupdate_schedule: weekly
     skip: []
