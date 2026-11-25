@@ -10,7 +10,7 @@ This app needs [ERPNext](https://github.com/frappe/erpnext). Each stable branch 
 | ------------ | ------------------ |
 | `version-16` | version 16         |
 
-`pyproject.toml` names the lowest versions the app supports.
+Every change is tested against the newest release of that version. `pyproject.toml` names the oldest releases the app has run on.
 
 You can install it using the [bench](https://github.com/frappe/bench) CLI:
 
