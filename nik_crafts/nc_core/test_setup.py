@@ -57,6 +57,9 @@ class TestSetup(IntegrationTestCase):
 			self.assertEqual(roles_of("User", person.name), expected, person.name)
 
 	def test_a_profile_the_business_changed_stays_as_it_is(self):
+		# Saving the profile saves its users, and ERPNext caches their roles again on the way.
+		for user in frappe.get_all("User Role Profile", {"role_profile": "Büro"}, pluck="parent"):
+			self.addCleanup(frappe.clear_cache, user=user)
 		self.addCleanup(frappe.db.rollback)
 		profile = frappe.get_doc("Role Profile", "Büro")
 		profile.set("roles", profile.roles[:1])
