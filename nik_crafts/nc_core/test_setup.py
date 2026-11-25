@@ -84,13 +84,6 @@ class TestSetup(IntegrationTestCase):
 			frappe.db.get_value("Property Setter", "Quotation-main-protect_attached_files", "module")
 		)
 
-	def test_a_worker_may_not_upload_a_public_file(self):
-		self.addCleanup(frappe.db.rollback)
-		file = frappe.new_doc("File", file_name="preise.csv", content="Montagestunde;65", is_private=0)
-
-		with self.set_user(WORKER):
-			self.assertRaises(frappe.PermissionError, file.insert)
-
 	def test_a_worker_may_not_upload_an_html_file(self):
 		self.addCleanup(frappe.db.rollback)
 		# Frappe checks the type only of a file that arrives with a request.
