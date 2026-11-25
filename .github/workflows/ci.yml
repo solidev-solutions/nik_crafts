@@ -103,14 +103,12 @@ jobs:
           if bench --site test_site list-apps | grep -q nik_crafts; then exit 1; fi
 
   image:
-    # The build takes about 20 minutes and clones the app by branch from GitHub, which a pull request does not have.
     if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     name: Image
     timeout-minutes: 60
 
     env:
-      # Read by docker compose and by the compose files of frappe_docker
       COMPOSE_FILE: compose.yaml:overrides/compose.mariadb.yaml:overrides/compose.redis.yaml:overrides/compose.noproxy.yaml
       CUSTOM_IMAGE: nik_crafts
       CUSTOM_TAG: nightly
