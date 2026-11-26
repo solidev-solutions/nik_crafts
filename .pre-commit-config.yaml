@@ -185,7 +185,6 @@ repos:
         files: '^\.semgrep/'
         pass_filenames: false
 
-  # Neither tool publishes a pre-commit hook, so both are installed from PyPI.
   - repo: local
     hooks:
       - id: polint

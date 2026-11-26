@@ -80,7 +80,6 @@ include_external_packages = true
 name = "Features stay apart and build on nc_core, nc_core builds on engine"
 type = "layers"
 containers = ["nik_crafts"]
-# tests and patches lie on top: the rules for data access and for a bypass leave both out, so nothing imports them.
 layers = [
     "tests",
     "patches",
