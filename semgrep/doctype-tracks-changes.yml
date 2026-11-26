@@ -1,0 +1,11 @@
+rules:
+  - id: doctype-tracks-changes
+    languages: [json]
+    severity: HIGH
+    message: >-
+      An own DocType keeps its change log from the start: turned on later, it does not bring back
+      what changed before. Tick "Track Changes".
+    patterns:
+      - pattern: '{..., "doctype": "DocType", ...}'
+      - pattern-not: '{..., "istable": 1, ...}'
+      - pattern-not: '{..., "track_changes": 1, ...}'

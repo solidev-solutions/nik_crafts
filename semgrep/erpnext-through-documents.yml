@@ -1,0 +1,39 @@
+rules:
+  - id: erpnext-through-documents
+    languages: [python]
+    severity: HIGH
+    message: >-
+      ERPNext's tables change only through the document: save, submit, cancel.
+      A direct write names an own table as a plain string in the call ("NC ..."),
+      and raw SQL and changes to a table's structure live in patches/.
+    patterns:
+      - pattern-either:
+          - pattern: frappe.db.$METHOD(...)
+          - patterns:
+              - pattern: frappe.local.$HANDLE.$METHOD(...)
+              - metavariable-regex:
+                  metavariable: $HANDLE
+                  regex: ^(db|primary_db|replica_db)$
+      - pattern-either:
+          - patterns:
+              - pattern-either:
+                  - pattern: $DB.$METHOD($DOCTYPE, ...)
+                  - patterns:
+                      - pattern: $DB.$METHOD(..., $PARAMETER=$DOCTYPE, ...)
+                      - metavariable-regex:
+                          metavariable: $PARAMETER
+                          regex: ^(dt|doctype)$
+              - metavariable-regex:
+                  metavariable: $METHOD
+                  regex: ^(set_value|set_single_value|delete|truncate|bulk_insert|bulk_update)$
+              - metavariable-regex:
+                  metavariable: $DOCTYPE
+                  regex: ^(?!["']NC [^"']*["']$)
+          - patterns:
+              - pattern: $DB.$METHOD(...)
+              - metavariable-regex:
+                  metavariable: $METHOD
+                  regex: ^(sql|sql_list|sql_ddl|multisql|execute_query|add_index|add_unique|rename_column|rename_table|change_column_type|updatedb|create_sequence|set_next_sequence_val)$
+    paths:
+      exclude:
+        - /nik_crafts/patches

@@ -1,0 +1,12 @@
+rules:
+  - id: rights-in-role-table
+    languages: [python]
+    severity: HIGH
+    message: Rights live in the role table of the DocType. Ask frappe.has_permission instead of naming a role.
+    pattern-either:
+      - pattern: $USER.get_roles(...)
+      - pattern: frappe.only_for(...)
+    paths:
+      exclude:
+        - test_*.py
+        - /nik_crafts/tests
