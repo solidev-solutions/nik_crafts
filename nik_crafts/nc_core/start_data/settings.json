@@ -3,6 +3,11 @@
   "enable_immutable_ledger": 1
  },
  "System Settings": {
-  "allow_error_traceback": 0
+  "allow_error_traceback": 0,
+  "login_with_email_link": 0,
+  "allowed_file_extensions": "JPG\nJPEG\nPNG\nGIF\nWEBP\nAVIF\nBMP\nICO\nSVG\nHEIC\nPDF\nXML\nCSV\nXLS\nXLSX\nTXT"
+ },
+ "Website Settings": {
+  "auto_account_deletion": 0
  }
 }

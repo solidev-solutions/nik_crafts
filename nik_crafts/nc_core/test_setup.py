@@ -1,9 +1,14 @@
 """The start data reaches the site, the company of the setup wizard and every company created after it."""
 
 import frappe
+from frappe.core.doctype.file.exceptions import FileTypeNotAllowed
 from frappe.tests import IntegrationTestCase
+from frappe.utils import set_request
+from frappe.www.login import send_login_link
 
 from nik_crafts.nc_core import setup
+
+WORKER = "lukas.berger@musterbetrieb.example"
 
 
 class TestSetup(IntegrationTestCase):
@@ -14,6 +19,7 @@ class TestSetup(IntegrationTestCase):
 		self.assertEqual(frappe.db.get_single_value("System Settings", "number_format"), "#.###,##")
 		self.assertFalse(frappe.db.get_single_value("System Settings", "allow_error_traceback"))
 		self.assertTrue(frappe.db.get_single_value("Accounts Settings", "enable_immutable_ledger"))
+		self.assertEqual(frappe.db.get_single_value("Website Settings", "auto_account_deletion"), 0)
 		self.assertEqual(default_templates(company), ["Umsatzsteuer 20 %", "Vorsteuer 20 %"])
 
 	def test_a_company_created_later_gets_its_taxes(self):
@@ -77,6 +83,34 @@ class TestSetup(IntegrationTestCase):
 		self.assertIsNone(
 			frappe.db.get_value("Property Setter", "Quotation-main-protect_attached_files", "module")
 		)
+
+	def test_a_worker_may_not_upload_an_html_file(self):
+		self.addCleanup(frappe.db.rollback)
+		set_request(method="POST", path="/")
+		self.addCleanup(delattr, frappe.local, "request")
+		file = frappe.new_doc("File", file_name="seite.html", content="<p>Seite</p>", is_private=1)
+
+		with self.set_user(WORKER):
+			self.assertRaises(FileTypeNotAllowed, file.insert)
+
+	def test_no_login_link_is_sent(self):
+		self.addCleanup(frappe.db.rollback)
+		frappe.get_doc(
+			{
+				"doctype": "Email Account",
+				"email_account_name": "Büro",
+				"email_id": "buero@musterbetrieb.example",
+				"enable_outgoing": 1,
+				"default_outgoing": 1,
+				"smtp_server": "smtp.musterbetrieb.example",
+				"no_smtp_authentication": 1,
+			}
+		).insert()
+		queued = frappe.db.count("Email Queue")
+
+		send_login_link(WORKER)
+
+		self.assertEqual(frappe.db.count("Email Queue"), queued)
 
 	def test_submitted_documents_keep_their_files(self):
 		protected = [

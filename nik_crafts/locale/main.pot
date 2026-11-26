@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: NichtImKopf Crafts Community VERSION\n"
 "Report-Msgid-Bugs-To: contact@solidev.solutions\n"
-"POT-Creation-Date: 2026-11-24 11:57+0000\n"
-"PO-Revision-Date: 2026-11-24 11:57+0000\n"
+"POT-Creation-Date: 2026-11-25 09:26+0000\n"
+"PO-Revision-Date: 2026-11-25 09:26+0000\n"
 "Last-Translator: contact@solidev.solutions\n"
 "Language-Team: contact@solidev.solutions\n"
 "MIME-Version: 1.0\n"
@@ -16,11 +16,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.18.0\n"
 
-#: nik_crafts/nc_core/setup.py:16
+#: nik_crafts/nc_core/setup.py:20
 msgid "Setting up NichtImKopf Crafts"
 msgstr ""
 
-#: nik_crafts/nc_core/setup.py:14
+#: nik_crafts/nc_core/files.py:15
+msgid "The name of a file must keep the type it was stored with."
+msgstr ""
+
+#: nik_crafts/nc_core/setup.py:18
 msgid "The setup of NichtImKopf Crafts failed"
 msgstr ""
 
