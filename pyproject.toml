@@ -17,6 +17,9 @@ dependencies = [
 requires = ["flit_core >=3.12,<5"]
 build-backend = "flit_core.buildapi"
 
+[dependency-groups]
+rules = ["mutmut==3.8.1", "pytest==9.2.0"]
+
 [tool.bench.frappe-dependencies]
 frappe = ">=16.60.2,<17.0.0"
 erpnext = ">=16.60.0,<17.0.0"
@@ -44,6 +47,7 @@ select = [
     "B",
     "RUF",
     "INP",
+    "TID251",
     "C901",
     "PLR0912",
     "PLR0915",
@@ -66,6 +70,10 @@ ignore = [
     "W191", # the code is indented with tabs
 ]
 typing-modules = ["frappe.types.DF"]
+
+[tool.ruff.lint.flake8-tidy-imports.banned-api]
+"pytest".msg = "Rule tests are a plain unittest.TestCase, because bench run-tests runs them too and the bench has no pytest."
+"unittest.mock".msg = "Tests run against real Frappe and ERPNext. A rule that needs no site lives in domain/ and is tested there."
 
 [tool.ruff.format]
 quote-style = "double"
@@ -161,3 +169,11 @@ type = "acyclic_siblings"
 ancestors = ["nik_crafts"]
 depth = 0
 broken_contract_guidance = "One of the two features must not know the other. Pass the value in, or let the other feature react to the document event."
+
+[tool.mutmut]
+source_paths = ["nik_crafts/"]
+only_mutate = ["nik_crafts/*/domain/*.py", "nik_crafts/engine/*.py"]
+do_not_mutate = ["*/test_*.py"]
+
+[tool.pytest]
+testpaths = ["nik_crafts/*/domain", "nik_crafts/engine"]

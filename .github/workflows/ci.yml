@@ -20,6 +20,7 @@ jobs:
   tests:
     runs-on: ubuntu-latest
     name: ${{ matrix.hrms && 'Server with HRMS' || 'Server' }}
+    timeout-minutes: 20
 
     strategy:
       fail-fast: false
@@ -120,6 +121,32 @@ jobs:
           bench --site test_site list-apps
           # uninstall-app also exits with 0 when it refuses to remove the app
           if bench --site test_site list-apps | grep -q nik_crafts; then exit 1; fi
+
+  rules:
+    runs-on: ubuntu-latest
+    name: Rules
+    if: github.event_name != 'schedule'
+    timeout-minutes: 10
+
+    steps:
+      - name: Clone
+        uses: actions/checkout@v7.0.1
+
+      - name: Setup Python
+        uses: actions/setup-python@v7.1.0
+        with:
+          python-version: '3.14'
+
+      - name: Mutate the rules
+        if: hashFiles('nik_crafts/*/domain/**', 'nik_crafts/engine/**') != ''
+        run: |
+          pip install --group rules
+          mutmut run
+          mutmut results > mutants/results.txt
+          if grep -v ': timeout$' mutants/results.txt; then
+            echo "::error::No test notices these changes to a rule. 'mutmut show <name>' shows one, 'mutmut browse' all of them."
+            exit 1
+          fi
 
   image:
     if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
