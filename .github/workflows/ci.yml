@@ -125,7 +125,6 @@ jobs:
   rules:
     runs-on: ubuntu-latest
     name: Rules
-    # The rules use neither Frappe nor ERPNext, so the nightly run would repeat the same result.
     if: github.event_name != 'schedule'
     timeout-minutes: 10
 
@@ -139,13 +138,11 @@ jobs:
           python-version: '3.14'
 
       - name: Mutate the rules
-        # mutmut stops with an error when there is no rule to mutate.
         if: hashFiles('nik_crafts/*/domain/**', 'nik_crafts/engine/**') != ''
         run: |
           pip install --group rules
           mutmut run
           mutmut results > mutants/results.txt
-          # mutmut run also exits with 0 when a change goes unnoticed. A timeout means a test noticed it.
           if grep -v ': timeout$' mutants/results.txt; then
             echo "::error::No test notices these changes to a rule. 'mutmut show <name>' shows one, 'mutmut browse' all of them."
             exit 1
