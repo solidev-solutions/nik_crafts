@@ -15,7 +15,6 @@ def load():
 	if frappe.is_setup_complete():
 		raise RuntimeError("The sample company needs a site whose setup has not run yet.")
 
-	# The wizard switches the running process to German, which would leave the caller in it.
 	lang = frappe.local.lang
 	year = getdate().year
 	setup_complete(
