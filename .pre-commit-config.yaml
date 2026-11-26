@@ -106,6 +106,71 @@ repos:
         entry: "Own DocTypes start with NC, for example NC Time Entry."
         files: '^nik_crafts/[^/]+/doctype/(?!nc_)[^/]+/'
 
+      - id: feature-places
+        name: "Feature code lives in doctype/, api/, hooks/, application/, domain/, repositories/ or contract.py"
+        language: pygrep
+        entry: '\S'
+        args: [--multiline]
+        files: '^nik_crafts/nc_(?!core/)[^/]+/(?!(doctype|api|hooks|application|domain|repositories|report|page|dashboard_chart_source|web_form|notification)/)(?!contract\.py$)'
+        types: [python]
+
+      - id: shared-packages-start-empty
+        name: "engine/ and nc_core/ keep an empty __init__.py"
+        language: pygrep
+        entry: '\S'
+        args: [--multiline]
+        files: '^nik_crafts/(engine|nc_core)/__init__\.py$'
+
+      - id: exceptions-carry-a-reason
+        name: "An exception is a line of its own above the finding: # nosemgrep: <rule> -- <why it is needed>"
+        language: pygrep
+        entry: '^(?!\s*(#|//) nosemgrep: [\w.-]+(, [\w.-]+)* -- [^\s,]+ [^,]*[^\s,]$)(?i:[^a-zA-Z0-9]*nosem|.* nosem)'
+        types_or: [python, pyi, javascript, jsx, ts, tsx, json]
+
+      - id: bypass-in-repositories
+        name: "A bypass stands in repositories/ or nc_core/"
+        language: pygrep
+        entry: 'nosemgrep: ([\w.-]+, )*[\w.-]*(permission-bypass|validation-bypass|manual-rollback|erpnext-through-documents|frappe-setuser|frappe-manual-commit)\b'
+        files: '^nik_crafts/'
+        types_or: [python, pyi]
+        exclude: |
+            (?x)^(
+                nik_crafts/nc_[^/]+/repositories/.*|
+                nik_crafts/nc_core/.*|
+                nik_crafts/patches/.*|
+                (.*/)?test_[^/]*\.py
+            )$
+
+      - id: import-linter
+        name: "Imports follow the architecture"
+        language: python
+        entry: lint-imports
+        additional_dependencies: ["import-linter==2.16"]
+        pass_filenames: false
+        types_or: [python, toml]
+
+  - repo: https://github.com/semgrep/pre-commit
+    rev: v1.185.0
+    hooks:
+      - id: semgrep
+        name: "Rules of the architecture"
+        args:
+          - --config=semgrep/
+          - --error
+          - --metrics=off
+          - --disable-version-check
+          - --skip-unknown-extensions
+        types_or: [python, pyi, javascript, jsx, ts, tsx, json]
+        require_serial: true
+        exclude: '^semgrep/'
+
+      - id: semgrep
+        alias: semgrep-rule-tests
+        name: "The rules of the architecture catch what they should"
+        args: [--test, --strict, --metrics=off, semgrep/]
+        files: '^semgrep/'
+        pass_filenames: false
+
 ci:
     autoupdate_schedule: weekly
     skip: []

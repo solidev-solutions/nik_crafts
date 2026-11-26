@@ -1,0 +1,87 @@
+rules:
+  - id: validation-bypass
+    languages: [python]
+    severity: HIGH
+    message: >-
+      This writes past the controller, so the rules in domain/ and Frappe's own checks are not asked.
+      Save the document wherever possible. An intended bypass stands in repositories/ or nc_core/,
+      and the line directly above it holds nothing but:
+      # nosemgrep: validation-bypass -- <why it is needed>
+    pattern-either:
+      - patterns:
+          - pattern-either:
+              - pattern: $CALL(..., $SWITCH=$VALUE, ...)
+              - pattern: $OBJECT.$SWITCH = $VALUE
+              - pattern: '{..., "$SWITCH": $VALUE, ...}'
+              - pattern: $OBJECT["$SWITCH"] = $VALUE
+              - pattern: setattr($OBJECT, "$SWITCH", $VALUE)
+              - pattern: $OBJECT.setdefault("$SWITCH", $VALUE)
+              - patterns:
+                  - pattern: |
+                      def $FUNCTION(..., $SWITCH, ...):
+                          ...
+                  - focus-metavariable: $SWITCH
+          - metavariable-regex:
+              metavariable: $SWITCH
+              regex: ^(ignore_(\w*validat\w*|mandatory|links|linked_doctypes|on_trash)|in_(import|install))$
+      - patterns:
+          - pattern: $DOC.$RAW(...)
+          - metavariable-regex:
+              metavariable: $RAW
+              regex: ^(db_set|db_insert|db_update|db_update_all|update_child_table|update_children|update_single)$
+      - pattern: frappe.model.document.bulk_insert(...)
+      - patterns:
+          - pattern-either:
+              - pattern: frappe.db.$WRITE(...)
+              - patterns:
+                  - pattern: frappe.local.$HANDLE.$WRITE(...)
+                  - metavariable-regex:
+                      metavariable: $HANDLE
+                      regex: ^(db|primary_db|replica_db)$
+          - metavariable-regex:
+              metavariable: $WRITE
+              regex: ^(set_value|set_single_value|delete|truncate|bulk_insert|bulk_update)$
+      - patterns:
+          - pattern: frappe.qb.$WRITE(...)
+          - metavariable-regex:
+              metavariable: $WRITE
+              regex: ^(update|into)$
+      - pattern: frappe.qb.from_(...). ... .delete(...)
+      - patterns:
+          - pattern-either:
+              - pattern: frappe.qb.get_query(..., $WRITE=$VALUE, ...)
+              - pattern: frappe.get_query(..., $WRITE=$VALUE, ...)
+          - metavariable-regex:
+              metavariable: $WRITE
+              regex: ^(update|into|delete)$
+      - patterns:
+          - pattern: $QUERY.$WRITE(...). ... .run(...)
+          - metavariable-regex:
+              metavariable: $WRITE
+              regex: ^(update|insert|delete)$
+          - pattern-not: frappe.qb.update(...). ... .run(...)
+          - pattern-not: frappe.qb.into(...). ... .run(...)
+          - pattern-not: frappe.qb.from_(...). ... .run(...)
+      - patterns:
+          - pattern: $OBJECT.$FUNCTION(..., $SWITCH=$VALUE, ...)
+          - metavariable-regex:
+              metavariable: $FUNCTION
+              regex: ^(delete|delete_doc|delete_doc_if_exists|rename|_rename|rename_doc)$
+          - metavariable-regex:
+              metavariable: $SWITCH
+              regex: ^(force|for_reload|validate|validate_rename)$
+      - patterns:
+          - pattern: $MODULE.$DELETE($DOCTYPE, $NAME, $FORCE, ...)
+          - metavariable-regex:
+              metavariable: $DELETE
+              regex: ^delete_doc(_if_exists)?$
+      - patterns:
+          - pattern-either:
+              - pattern: $MODULE.rename_doc($DOCTYPE, $OLD, $NEW, $FORCE, ...)
+              - pattern: $DOC.rename($NAME, $MERGE, $FORCE, ...)
+              - pattern: $DOC._rename($NAME, $MERGE, $FORCE, ...)
+          - pattern-not: frappe.client.rename_doc(...)
+    paths:
+      exclude:
+        - /nik_crafts/patches
+        - test_*.py

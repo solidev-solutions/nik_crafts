@@ -13,9 +13,17 @@ NichtImKopf Crafts Community (`nik_crafts`) is business software for craft busin
 - Make the smallest correct change. Do not reformat, rename or move code you did not need to touch.
 - Do not guard against cases that cannot happen.
 - Do not add an abstraction before a second caller needs it.
-- Write code that needs no comment. Add one only where the code cannot say it itself: a reason that is not obvious, a limit, a workaround. No comments that narrate the change.
+- Write code that needs no comment. Add one only where the code cannot say it itself: a reason that is not obvious, a limit, a workaround. A comment states the condition that holds today, never the way there.
 - What a tool can check becomes a check in `.pre-commit-config.yaml`, not a sentence in a file.
 - Everything in this repository is English. German reaches the interface through Frappe's translations.
+
+## Architecture
+
+- DocType files come from saving the DocType in developer mode, never from writing them by hand.
+- Code moves to `nc_core/` or `engine/` once a second feature uses it or a planned feature will. The pull request names that feature.
+- `contract.py` hands out plain values and models from `domain/`, never Frappe documents.
+- Reading, saving and deleting a record never get an endpoint of their own.
+- A feature names neither the DocType nor the module path of another feature as a string. It goes through that feature's `contract.py`.
 
 ## Commands
 
@@ -33,5 +41,5 @@ NichtImKopf Crafts Community (`nik_crafts`) is business software for craft busin
 ## Never
 
 - Never report something as tested, reproduced or checked that did not run.
-- Never bypass permissions to make something work.
+- Never bypass permissions to make something work. Where the design calls for a bypass, the checks say where it stands and how the line above it names the reason.
 - Never write to ERPNext's tables directly. Change its data through the document: `save`, `submit`, `cancel`.

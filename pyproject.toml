@@ -32,6 +32,7 @@ packages = []
 [tool.ruff]
 line-length = 110
 target-version = "py314"
+extend-exclude = ["semgrep"]
 
 [tool.ruff.lint]
 select = [
@@ -42,6 +43,7 @@ select = [
     "UP",
     "B",
     "RUF",
+    "INP",
     "C901",
     "PLR0912",
     "PLR0915",
@@ -69,3 +71,92 @@ typing-modules = ["frappe.types.DF"]
 quote-style = "double"
 indent-style = "tab"
 docstring-code-format = true
+
+[tool.importlinter]
+root_package = "nik_crafts"
+include_external_packages = true
+
+[[tool.importlinter.contracts]]
+name = "Features stay apart and build on nc_core, nc_core builds on engine"
+type = "layers"
+containers = ["nik_crafts"]
+layers = [
+    "patches",
+    "(nc_core)",
+    "(engine)",
+]
+exhaustive = true
+exhaustive_ignores = [
+    "config",
+    "hooks",
+    "templates",
+]
+ignore_imports = ["nik_crafts.** -> nik_crafts.*.contract"]
+unmatched_ignore_imports_alerting = "none"
+broken_contract_guidance = "A feature reaches another feature only through its contract.py, and nothing imports a patch. Every feature module is listed in the line of layers above nc_core."
+
+[[tool.importlinter.contracts]]
+name = "Inside a module imports point downwards"
+type = "layers"
+containers = ["nik_crafts.*"]
+layers = [
+    "(doctype) | (api) | (hooks) | (contract) | (report) | (page) | (dashboard_chart_source) | (web_form) | (notification)",
+    "(application)",
+    "(repositories)",
+    "(domain)",
+]
+broken_contract_guidance = "Entry points call application, application calls repositories and domain. Nothing imports an entry point."
+
+[[tool.importlinter.contracts]]
+name = "Rules and engine run without Frappe"
+type = "forbidden"
+source_modules = ["nik_crafts.*.domain", "nik_crafts.engine.**"]
+forbidden_modules = ["frappe", "erpnext"]
+broken_contract_guidance = "domain/ and engine/ are plain Python and return values. The caller in application/ talks to Frappe."
+
+[[tool.importlinter.contracts]]
+name = "Only nc_core.erpnext imports ERPNext"
+type = "forbidden"
+source_modules = ["nik_crafts"]
+forbidden_modules = ["erpnext"]
+ignore_imports = [
+    "nik_crafts.nc_core.erpnext -> erpnext",
+    "nik_crafts.nc_core.erpnext.** -> erpnext",
+]
+allow_indirect_imports = true
+unmatched_ignore_imports_alerting = "none"
+broken_contract_guidance = "Ask nc_core/erpnext/ for the value. It returns plain values, our own models or the draft of a follow-up document."
+
+[[tool.importlinter.contracts]]
+name = "Shared code does not know features"
+type = "forbidden"
+source_modules = ["nik_crafts.nc_core.**", "nik_crafts.engine.**"]
+forbidden_modules = ["nik_crafts.*.contract"]
+broken_contract_guidance = "Shared code never calls a feature. Pass the value in, or move the code into the feature."
+
+[[tool.importlinter.contracts]]
+name = "Another feature is called from application only"
+type = "forbidden"
+source_modules = [
+    "nik_crafts.*.doctype",
+    "nik_crafts.*.api",
+    "nik_crafts.*.hooks",
+    "nik_crafts.*.contract",
+    "nik_crafts.*.report",
+    "nik_crafts.*.page",
+    "nik_crafts.*.dashboard_chart_source",
+    "nik_crafts.*.web_form",
+    "nik_crafts.*.notification",
+    "nik_crafts.*.repositories",
+    "nik_crafts.*.domain",
+]
+forbidden_modules = ["nik_crafts.*.contract"]
+allow_indirect_imports = true
+broken_contract_guidance = "Call the other feature from a function in application/. Entry points call that function."
+
+[[tool.importlinter.contracts]]
+name = "Features do not depend on each other in a circle"
+type = "acyclic_siblings"
+ancestors = ["nik_crafts"]
+depth = 0
+broken_contract_guidance = "One of the two features must not know the other. Pass the value in, or let the other feature react to the document event."
