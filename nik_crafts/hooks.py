@@ -5,7 +5,7 @@ app_description = "Business software for small craft businesses, built on ERPNex
 app_email = "contact@solidev.solutions"
 app_license = "agpl-3.0-or-later"
 
-required_apps = ["frappe/erpnext@version-16"]
+required_apps = ["frappe/erpnext"]
 
 after_uninstall = "frappe.core.doctype.scheduled_job_type.scheduled_job_type.sync_jobs"
 

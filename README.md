@@ -4,13 +4,30 @@ Business software for small craft businesses, built on ERPNext
 
 ### Installation
 
-This app needs [ERPNext](https://github.com/frappe/erpnext) version 16. You can install it using the [bench](https://github.com/frappe/bench) CLI:
+This app needs [ERPNext](https://github.com/frappe/erpnext). Each stable branch of the app runs on one major version of Frappe and ERPNext:
+
+| Branch       | Frappe and ERPNext |
+| ------------ | ------------------ |
+| `version-16` | version 16         |
+
+Every change is tested against the newest release of that version. `pyproject.toml` names the oldest releases the app has run on.
+
+You can install it using the [bench](https://github.com/frappe/bench) CLI:
 
 ```bash
 cd $PATH_TO_YOUR_BENCH
 bench get-app erpnext --branch version-16
 bench get-app https://github.com/solidev-solutions/nik_crafts --branch version-16
 bench install-app nik_crafts
+```
+
+Or build an image with [frappe_docker](https://github.com/frappe/frappe_docker), with this `apps.json`:
+
+```json
+[
+  {"url": "https://github.com/frappe/erpnext", "branch": "version-16"},
+  {"url": "https://github.com/solidev-solutions/nik_crafts", "branch": "version-16"}
+]
 ```
 
 ### Contributing
