@@ -101,6 +101,32 @@ def checks_in_one_branch(entry: str):
 
 class NCTimeEntry(Document):
 	# ok: endpoint-checks-permission
-	@frappe.whitelist()
+	@frappe.whitelist(methods=["GET"])
 	def preview(self):
 		return self.minutes
+
+
+# ruleid: endpoint-checks-permission
+@frappe.whitelist(allow_guest=True)
+def names_no_method(entry: str):
+	return entry
+
+
+# ruleid: endpoint-checks-permission
+@whitelist()
+def names_no_method_and_imported(entry: str):
+	return entry
+
+
+# ruleid: endpoint-checks-permission
+@frappe.read_only()
+@frappe.whitelist()
+def names_no_method_below_a_second_decorator(entry: str):
+	return entry
+
+
+# ruleid: endpoint-checks-permission
+whitelisted_by_call_with_its_method = frappe.whitelist(methods=["POST"])(plain)
+
+# ruleid: endpoint-checks-permission
+kept_without_a_method = frappe.whitelist(allow_guest=True)

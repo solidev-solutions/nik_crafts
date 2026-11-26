@@ -3,7 +3,7 @@ rules:
     languages: [python]
     severity: HIGH
     message: >-
-      An own endpoint is a function under @frappe.whitelist() that checks a right of its caller before
+      An own endpoint is a function under @frappe.whitelist(...) that checks a right of its caller before
       it does anything: frappe.has_permission(..., throw=True), without a user, is its first statement.
     pattern-either:
       - patterns:

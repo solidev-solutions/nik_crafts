@@ -75,6 +75,8 @@ typing-modules = ["frappe.types.DF"]
 [tool.ruff.lint.flake8-tidy-imports.banned-api]
 "pytest".msg = "Rule tests are a plain unittest.TestCase, because bench run-tests runs them too and the bench has no pytest."
 "unittest.mock".msg = "Tests run against real Frappe and ERPNext. A rule that needs no site lives in domain/ and is tested there."
+"__future__.annotations".msg = "It turns every annotation of the file into a string, and Frappe neither checks nor converts an endpoint argument annotated with a string. Python 3.14 resolves a forward reference without it."
+"frappe.tests.utils.whitelist_for_tests".msg = "A test defines no endpoint, neither with frappe.whitelist nor with this helper that Frappe's rule for test files suggests: it whitelists the same way, and the endpoint rules do not see it. Call the endpoints of the feature from the test."
 
 [tool.ruff.format]
 quote-style = "double"
