@@ -131,7 +131,7 @@ broken_contract_guidance = "Ask nc_core/erpnext/ for the value. It returns plain
 [[tool.importlinter.contracts]]
 name = "Shared code does not know features"
 type = "forbidden"
-source_modules = ["nik_crafts.nc_core.**", "nik_crafts.engine.**"]
+source_modules = ["nik_crafts.nc_core", "nik_crafts.engine.**"]
 forbidden_modules = ["nik_crafts.*.contract"]
 broken_contract_guidance = "Shared code never calls a feature. Pass the value in, or move the code into the feature."
 

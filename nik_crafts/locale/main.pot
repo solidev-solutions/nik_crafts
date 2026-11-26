@@ -7,12 +7,20 @@ msgid ""
 msgstr ""
 "Project-Id-Version: NichtImKopf Crafts Community VERSION\n"
 "Report-Msgid-Bugs-To: contact@solidev.solutions\n"
-"POT-Creation-Date: 2026-11-24 09:42+0000\n"
-"PO-Revision-Date: 2026-11-24 09:42+0000\n"
+"POT-Creation-Date: 2026-11-24 11:57+0000\n"
+"PO-Revision-Date: 2026-11-24 11:57+0000\n"
 "Last-Translator: contact@solidev.solutions\n"
 "Language-Team: contact@solidev.solutions\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.18.0\n"
+
+#: nik_crafts/nc_core/setup.py:16
+msgid "Setting up NichtImKopf Crafts"
+msgstr ""
+
+#: nik_crafts/nc_core/setup.py:14
+msgid "The setup of NichtImKopf Crafts failed"
+msgstr ""
 

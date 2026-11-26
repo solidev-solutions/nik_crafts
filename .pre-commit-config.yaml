@@ -17,6 +17,7 @@ repos:
         args: [--assume-in-merge]
       - id: check-ast
       - id: check-json
+        exclude: '^semgrep/'
       - id: check-toml
       - id: check-yaml
       - id: debug-statements
