@@ -1,0 +1,16 @@
+rules:
+  - id: manual-rollback
+    languages: [python]
+    severity: HIGH
+    message: >-
+      One call is one transaction, and Frappe ends it. An intended rollback stands in repositories/
+      or nc_core/, and the line directly above it holds nothing but:
+      # nosemgrep: manual-rollback -- <why it is needed>
+    pattern-either:
+      - pattern: $DB.rollback(...)
+      - pattern: frappe.database.savepoint(...)
+      - pattern: frappe.database.database.savepoint(...)
+    paths:
+      exclude:
+        - /nik_crafts/patches
+        - test_*.py

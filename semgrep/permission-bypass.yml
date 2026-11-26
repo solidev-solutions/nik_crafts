@@ -1,0 +1,79 @@
+rules:
+  - id: permission-bypass
+    languages: [python]
+    severity: HIGH
+    message: >-
+      This turns off a permission check of Frappe or acts as another user. insert, save and delete take
+      their switches by name, and an argument without a name is read as ignore_permissions: on another
+      object name the argument, as in image.save(fp=path). Act as the user wherever possible. An intended
+      bypass stands in repositories/ or nc_core/, and the line directly above it holds nothing but:
+      # nosemgrep: permission-bypass -- <why it is needed>
+    pattern-either:
+      - patterns:
+          - pattern-either:
+              - pattern: $CALL(..., $SWITCH=$VALUE, ...)
+              - pattern: $OBJECT.$SWITCH = $VALUE
+              - pattern: '{..., "$SWITCH": $VALUE, ...}'
+              - pattern: $OBJECT["$SWITCH"] = $VALUE
+              - pattern: setattr($OBJECT, "$SWITCH", $VALUE)
+              - pattern: $OBJECT.setdefault("$SWITCH", $VALUE)
+              - patterns:
+                  - pattern: |
+                      def $FUNCTION(..., $SWITCH, ...):
+                          ...
+                  - focus-metavariable: $SWITCH
+          - metavariable-regex:
+              metavariable: $SWITCH
+              regex: ^ignore_(?!share_permissions$)\w*perm\w*$
+      - patterns:
+          - pattern-either:
+              - pattern: $DOC.insert($SWITCH)
+              - patterns:
+                  - pattern: $DOC.insert($FIRST, $SECOND)
+                  - metavariable-regex:
+                      metavariable: $FIRST
+                      regex: ^(True|False|None)$
+              - pattern: $DOC.insert($FIRST, $SECOND, $THIRD, ...)
+              - pattern: $DOC.save($SWITCH, ...)
+              - pattern: $DOC.delete($SWITCH, ...)
+          - pattern-not: $DOC.$METHOD("...", ...)
+          - pattern-not: frappe.db.delete(...)
+          - pattern-not: frappe.local.$HANDLE.delete(...)
+          - pattern-not: frappe.cache.delete(...)
+          - pattern-not: frappe.client.$FUNCTION(...)
+          - pattern-not: requests.$METHOD(...)
+          - pattern-not: $QUERY.into(...). ... .insert(...)
+          - pattern-not-inside: $QUERY.insert(...). ... .run(...)
+      - patterns:
+          - pattern-either:
+              - pattern: $MODULE.$DELETE(..., for_reload=$VALUE, ...)
+              - pattern: $MODULE.$DELETE($DOCTYPE, $NAME, $FORCE, $IGNORE_DOCTYPES, $FOR_RELOAD, ...)
+          - metavariable-regex:
+              metavariable: $DELETE
+              regex: ^delete_doc(_if_exists)?$
+      - patterns:
+          - pattern: $OBJECT.$RENAME(..., $VALIDATE=$VALUE, ...)
+          - metavariable-regex:
+              metavariable: $RENAME
+              regex: ^(rename_doc|rename|_rename)$
+          - metavariable-regex:
+              metavariable: $VALIDATE
+              regex: ^(validate|validate_rename)$
+      - pattern: $MODULE.rename_doc($DOCTYPE, $OLD, $NEW, $FORCE, $MERGE, $IGNORE_PERMISSIONS, ...)
+      - pattern: $OBJECT.get_list(..., user=$USER, ...)
+      - pattern: frappe.session.user = $USER
+      - pattern: frappe.local.session.user = $USER
+      - pattern: frappe.session["user"] = $USER
+      - pattern: frappe.local.session["user"] = $USER
+      - pattern: frappe.session.update(...)
+      - pattern: frappe.local.session.update(...)
+      - pattern: frappe.local.session = $SESSION
+      - patterns:
+          - pattern: $LOGIN_MANAGER.$LOGIN(...)
+          - metavariable-regex:
+              metavariable: $LOGIN
+              regex: ^(login_as|login_as_guest|impersonate)$
+    paths:
+      exclude:
+        - /nik_crafts/patches
+        - test_*.py

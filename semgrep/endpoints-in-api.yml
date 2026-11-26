@@ -1,0 +1,13 @@
+rules:
+  - id: endpoints-in-api
+    languages: [python]
+    severity: HIGH
+    message: Own endpoints live in api/. Outside it only a controller method in doctype/ is whitelisted.
+    patterns:
+      - pattern: frappe.whitelist
+      - pattern-not-inside: |
+          class $CONTROLLER(...):
+              ...
+    paths:
+      exclude:
+        - /nik_crafts/nc_*/api

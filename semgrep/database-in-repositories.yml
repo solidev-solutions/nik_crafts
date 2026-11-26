@@ -1,0 +1,65 @@
+rules:
+  - id: database-in-repositories
+    languages: [python]
+    severity: HIGH
+    message: >-
+      Data access lives in repositories/ or nc_core/.
+      Entry points and application call a repository function.
+    pattern-either:
+      - pattern: frappe.db
+      - pattern: frappe.qb
+      - patterns:
+          - pattern: frappe.local.$HANDLE
+          - metavariable-regex:
+              metavariable: $HANDLE
+              regex: ^(db|qb|primary_db|replica_db)$
+      - patterns:
+          - pattern: frappe.$FUNCTION(...)
+          - metavariable-regex:
+              metavariable: $FUNCTION
+              regex: ^(get_doc|get_lazy_doc|get_cached_doc|get_last_doc|get_single|get_single_value|get_cached_value|get_value|set_value|get_list|get_all|new_doc|copy_doc|delete_doc|delete_doc_if_exists|rename_doc|import_doc|reload_doc|reload_doctype|make_property_setter|get_query|get_query_builder)$
+      - pattern: frappe.client.$FUNCTION(...)
+      - patterns:
+          - pattern: frappe.model.$MODULE.$FUNCTION(...)
+          - metavariable-regex:
+              metavariable: $MODULE
+              regex: ^(document|delete_doc|rename_doc|mapper|naming|workflow|create_new|db_query|qb_query)$
+      - pattern: import frappe.database
+      - pattern: import frappe.query_builder
+      - pattern: import pypika
+      - patterns:
+          - pattern: $DOC.$METHOD(...)
+          - metavariable-regex:
+              metavariable: $METHOD
+              regex: ^(db_set|db_get|db_insert|db_update|db_update_all|get_db_value|load_from_db|get_latest|update_child_table|update_children|update_single|deferred_insert|queue_action|_save|_submit|_cancel)$
+      - pattern: $DOC.insert()
+      - pattern: $DOC.insert($ARGUMENT)
+      - patterns:
+          - pattern: $DOC.insert(..., $PARAMETER=$VALUE, ...)
+          - metavariable-regex:
+              metavariable: $PARAMETER
+              regex: ^(ignore_permissions|ignore_links|ignore_if_duplicate|ignore_mandatory|set_name|set_child_names)$
+      - pattern: $DOC.save()
+      - pattern: $DOC.save(**$OPTIONS)
+      - patterns:
+          - pattern: $DOC.save(..., $PARAMETER=$VALUE, ...)
+          - metavariable-regex:
+              metavariable: $PARAMETER
+              regex: ^(ignore_permissions|ignore_version)$
+      - pattern: $DOC.delete()
+      - pattern: $DOC.delete(**$OPTIONS)
+      - patterns:
+          - pattern: $DOC.delete(..., $PARAMETER=$VALUE, ...)
+          - metavariable-regex:
+              metavariable: $PARAMETER
+              regex: ^(ignore_permissions|force|delete_permanently)$
+      - pattern: $DOC.submit()
+      - pattern: $DOC.cancel()
+      - pattern: $DOC.discard()
+      - pattern: $DOC.reload()
+    paths:
+      exclude:
+        - /nik_crafts/nc_*/repositories
+        - /nik_crafts/nc_core
+        - /nik_crafts/patches
+        - test_*.py
