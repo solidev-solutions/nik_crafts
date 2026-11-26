@@ -1,0 +1,23 @@
+rules:
+  - id: tests-are-not-imported
+    languages: [python]
+    severity: HIGH
+    message: >-
+      A test module is imported by tests only: the rules for data access and for a bypass leave it out.
+      Move what other code needs to its place in the feature.
+    pattern-either:
+      - patterns:
+          - pattern-either:
+              - pattern: import $MODULE
+              - pattern: from $MODULE import $NAME
+          - metavariable-regex:
+              metavariable: $MODULE
+              regex: ^(.*\.)?test_[\w.]*$
+      - patterns:
+          - pattern: from $MODULE import $NAME
+          - metavariable-regex:
+              metavariable: $NAME
+              regex: ^test_\w*$
+    paths:
+      exclude:
+        - test_*.py
