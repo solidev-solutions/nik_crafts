@@ -83,6 +83,14 @@ jobs:
         working-directory: /home/runner/frappe-bench
         run: bench validate-dependencies
 
+      - name: Translations match the code
+        if: env.UPSTREAM_BRANCH == 'version-16'
+        working-directory: /home/runner/frappe-bench
+        run: |
+          bench generate-pot-file --app nik_crafts
+          bench update-po-files --app nik_crafts --locale de
+          git -C apps/nik_crafts diff --exit-code -I'^#: ' -I'^# ' -I'^"(POT-Creation|PO-Revision)-Date: ' -I'^"Generated-By: ' -- nik_crafts/locale
+
       - name: Run Tests
         working-directory: /home/runner/frappe-bench
         run: |

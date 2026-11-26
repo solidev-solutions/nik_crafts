@@ -1,0 +1,4 @@
+[
+ {"doctype": "Item", "item_code": "Thermostatkopf", "item_group": "Products", "stock_uom": "Nos"},
+ {"doctype": "Item", "item_code": "Montagestunde", "item_group": "Services", "stock_uom": "Hour", "is_stock_item": 0}
+]

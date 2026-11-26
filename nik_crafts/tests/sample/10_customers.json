@@ -1,0 +1,4 @@
+[
+ {"doctype": "Customer", "customer_name": "Familie Gruber", "customer_type": "Individual"},
+ {"doctype": "Customer", "customer_name": "Hausverwaltung Donau GmbH", "customer_type": "Company"}
+]

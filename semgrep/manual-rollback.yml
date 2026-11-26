@@ -14,3 +14,4 @@ rules:
       exclude:
         - /nik_crafts/patches
         - test_*.py
+        - /nik_crafts/tests

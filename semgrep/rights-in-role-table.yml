@@ -9,3 +9,4 @@ rules:
     paths:
       exclude:
         - test_*.py
+        - /nik_crafts/tests

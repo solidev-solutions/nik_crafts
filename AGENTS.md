@@ -15,7 +15,7 @@ NichtImKopf Crafts Community (`nik_crafts`) is business software for craft busin
 - Do not add an abstraction before a second caller needs it.
 - Write code that needs no comment. Add one only where the code cannot say it itself: a reason that is not obvious, a limit, a workaround. A comment states the condition that holds today, never the way there.
 - What a tool can check becomes a check in `.pre-commit-config.yaml`, not a sentence in a file.
-- Everything in this repository is English. German reaches the interface through Frappe's translations.
+- Everything in this repository is English, except the sample company's data. German reaches the interface through Frappe's translations.
 
 ## Architecture
 
@@ -31,6 +31,7 @@ NichtImKopf Crafts Community (`nik_crafts`) is business software for craft busin
 - After changing a `uses:` line in a workflow: `gh actions-lock`, from the gh extension `github/gh-actions-lock`.
 - Tests: `bench --site <site> run-tests --app nik_crafts`, or `--module <dotted.path>` for one module.
 - Run tests on a throwaway site. Site names, ports and credentials belong to your machine and never to this repository.
+- New or changed texts: `bench generate-pot-file --app nik_crafts`, then `bench update-po-files --app nik_crafts --locale de`, then translate every empty `msgstr` in `nik_crafts/locale/de.po`.
 
 ## Pull requests
 
