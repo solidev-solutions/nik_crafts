@@ -1,0 +1,14 @@
+rules:
+  - id: endpoint-names-methods
+    languages: [python]
+    severity: HIGH
+    message: >-
+      An own endpoint and a whitelisted controller method name their one HTTP method in the one form this
+      rule reads: the keyword methods with a list that holds it, methods=["POST"] or methods=["GET"].
+      POST is for anything that changes data, for a read that takes a list, and for a controller method a
+      form script calls, because frm.call sends POST. GET is for any other read. The reason: without
+      methods Frappe also accepts GET, and what a GET request writes is rolled back without an error.
+    patterns:
+      - pattern: frappe.whitelist
+      - pattern-not-inside: frappe.whitelist(..., methods=["GET"], ...)
+      - pattern-not-inside: frappe.whitelist(..., methods=["POST"], ...)

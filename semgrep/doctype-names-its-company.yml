@@ -1,0 +1,13 @@
+rules:
+  - id: doctype-names-its-company
+    languages: [json]
+    severity: HIGH
+    message: >-
+      An own DocType holds the records of one company: it has the mandatory link field company,
+      so that a user permission on a company reaches it.
+    patterns:
+      - pattern: '{..., "doctype": "DocType", ...}'
+      - pattern-not: '{..., "istable": 1, ...}'
+      - pattern-not: '{..., "issingle": 1, ...}'
+      - pattern-not: >-
+          {..., "fields": [..., {..., "fieldname": "company", "fieldtype": "Link", "options": "Company", "reqd": 1, ...}, ...], ...}

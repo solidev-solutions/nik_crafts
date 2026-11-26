@@ -17,7 +17,7 @@ repos:
         args: [--assume-in-merge]
       - id: check-ast
       - id: check-json
-        exclude: '^\.semgrep/'
+        exclude: '^semgrep/'
       - id: check-toml
       - id: check-yaml
       - id: debug-statements
@@ -164,28 +164,20 @@ repos:
       - id: semgrep
         name: "Rules of the architecture"
         args:
-          - --config=.semgrep/architecture.yml
-          - --config=.semgrep/doctypes.yml
+          - --config=semgrep/
           - --error
           - --metrics=off
           - --disable-version-check
           - --skip-unknown-extensions
         types_or: [python, pyi, javascript, jsx, ts, tsx, json]
         require_serial: true
-        exclude: '^\.semgrep/'
+        exclude: '^semgrep/'
 
       - id: semgrep
         alias: semgrep-rule-tests
         name: "The rules of the architecture catch what they should"
-        args: [--test, --strict, --metrics=off, --config=.semgrep/architecture.yml, .semgrep/architecture.py]
-        files: '^\.semgrep/'
-        pass_filenames: false
-
-      - id: semgrep
-        alias: semgrep-doctype-rule-tests
-        name: "The rules for DocTypes catch what they should"
-        args: [--test, --strict, --metrics=off, --config=.semgrep/doctypes.yml, .semgrep/doctypes.json]
-        files: '^\.semgrep/'
+        args: [--test, --strict, --metrics=off, semgrep/]
+        files: '^semgrep/'
         pass_filenames: false
 
   - repo: local

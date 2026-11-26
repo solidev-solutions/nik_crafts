@@ -1,0 +1,33 @@
+[
+ {
+  "doctype": "DocType",
+  "fields": [
+   {
+    "fieldname": "company",
+    "fieldtype": "Link",
+    "options": "Company"
+   },
+   // ruleid: employee-link-says-what-it-is
+   {
+    "fieldname": "employee",
+    "fieldtype": "Link",
+    "options": "Employee"
+   },
+   // ok: employee-link-says-what-it-is
+   {
+    "fieldname": "colleague",
+    "fieldtype": "Link",
+    "ignore_user_permissions": 1,
+    "options": "Employee"
+   },
+   // ok: employee-link-says-what-it-is
+   {
+    "fieldname": "customer",
+    "fieldtype": "Link",
+    "options": "Customer"
+   }
+  ],
+  "name": "NC Missing Everything",
+  "track_changes": 0
+ }
+]

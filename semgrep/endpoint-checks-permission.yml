@@ -1,0 +1,55 @@
+rules:
+  - id: endpoint-checks-permission
+    languages: [python]
+    severity: HIGH
+    message: >-
+      An own endpoint is a function under @frappe.whitelist(...) that checks a right of its caller before
+      it does anything: frappe.has_permission(..., throw=True), without a user, is its first statement.
+    pattern-either:
+      - patterns:
+          - pattern-not-inside: |
+              class $CONTROLLER(...):
+                  ...
+          - pattern-either:
+              - patterns:
+                  - pattern: |
+                      @frappe.whitelist(...)
+                      def $ENDPOINT(...):
+                          ...
+                  - pattern-not: |
+                      @frappe.whitelist(...)
+                      def $ENDPOINT(...):
+                          frappe.has_permission(..., throw=True, ...)
+                          ...
+                  - pattern-not: |
+                      @frappe.whitelist(...)
+                      def $ENDPOINT(...):
+                          "..."
+                          frappe.has_permission(..., throw=True, ...)
+                          ...
+              - patterns:
+                  - pattern-either:
+                      - pattern: |
+                          @frappe.whitelist(...)
+                          def $ENDPOINT(...):
+                              $CHECK
+                              ...
+                      - pattern: |
+                          @frappe.whitelist(...)
+                          def $ENDPOINT(...):
+                              "..."
+                              $CHECK
+                              ...
+                  - metavariable-pattern:
+                      metavariable: $CHECK
+                      pattern-either:
+                        - pattern: frappe.has_permission(..., user=$USER, ...)
+                        - pattern: frappe.has_permission($DOCTYPE, $PTYPE, $DOC, $USER, ...)
+                        - pattern: $CONDITION and frappe.has_permission(...)
+                        - pattern: $CONDITION or frappe.has_permission(...)
+      - patterns:
+          - pattern: frappe.whitelist
+          - pattern-not-inside: |
+              @frappe.whitelist(...)
+              def $ENDPOINT(...):
+                  ...
