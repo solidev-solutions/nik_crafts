@@ -424,8 +424,6 @@ rules:
       POST is for anything that changes data, for a read that takes a list, and for a controller method a
       form script calls, because frm.call sends POST. GET is for any other read. The reason: without
       methods Frappe also accepts GET, and what a GET request writes is rolled back without an error.
-    # The name is matched and not the call, so whitelist handed on without a call is reported too.
-    # Not seen: whitelist that reaches a file through an own module which imported it from frappe.
     patterns:
       - pattern: frappe.whitelist
       - pattern-not-inside: frappe.whitelist(..., methods=["GET"], ...)
