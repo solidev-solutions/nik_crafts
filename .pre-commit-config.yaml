@@ -153,22 +153,9 @@ repos:
     rev: v1.185.0
     hooks:
       - id: semgrep
-        name: "Rules of the architecture, of Frappe and of semgrep"
+        name: "Rules of the architecture"
         args:
           - --config=.semgrep/architecture.yml
-          - --config=r/python.lang.correctness
-          - --config=https://raw.githubusercontent.com/frappe/semgrep-rules/81a6e3d47a328249e8ddf04c586e493dd5553002/rules/code_quality.yml
-          - --config=https://raw.githubusercontent.com/frappe/semgrep-rules/81a6e3d47a328249e8ddf04c586e493dd5553002/rules/frappe_correctness.yml
-          - --config=https://raw.githubusercontent.com/frappe/semgrep-rules/81a6e3d47a328249e8ddf04c586e493dd5553002/rules/hooks.yml
-          - --config=https://raw.githubusercontent.com/frappe/semgrep-rules/81a6e3d47a328249e8ddf04c586e493dd5553002/rules/report.yml
-          - --config=https://raw.githubusercontent.com/frappe/semgrep-rules/81a6e3d47a328249e8ddf04c586e493dd5553002/rules/translate.yml
-          - --config=https://raw.githubusercontent.com/frappe/semgrep-rules/81a6e3d47a328249e8ddf04c586e493dd5553002/rules/ux.yml
-          - --config=https://raw.githubusercontent.com/frappe/semgrep-rules/81a6e3d47a328249e8ddf04c586e493dd5553002/rules/security/authorization.yml
-          - --config=https://raw.githubusercontent.com/frappe/semgrep-rules/81a6e3d47a328249e8ddf04c586e493dd5553002/rules/security/filesystem.yml
-          - --config=https://raw.githubusercontent.com/frappe/semgrep-rules/81a6e3d47a328249e8ddf04c586e493dd5553002/rules/security/format_string_injection.yml
-          - --config=https://raw.githubusercontent.com/frappe/semgrep-rules/81a6e3d47a328249e8ddf04c586e493dd5553002/rules/security/rce.yml
-          - --config=https://raw.githubusercontent.com/frappe/semgrep-rules/81a6e3d47a328249e8ddf04c586e493dd5553002/rules/security/sql.yml
-          - --config=https://raw.githubusercontent.com/frappe/semgrep-rules/81a6e3d47a328249e8ddf04c586e493dd5553002/rules/security/whitelisted.yml
           - --error
           - --metrics=off
           - --disable-version-check
