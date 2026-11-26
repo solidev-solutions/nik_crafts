@@ -43,7 +43,6 @@ def after_install():
 
 def on_company_update(doc, _method):
 	"""A company created after the setup. The wizard's company is left to our stage."""
-	# ERPNext builds the chart of accounts in Company.on_update, which runs after after_insert.
 	if doc.flags.in_insert and not frappe.flags.in_setup_wizard:
 		set_up_company(doc.name, in_use=False)
 
