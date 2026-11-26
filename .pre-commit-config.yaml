@@ -156,20 +156,20 @@ repos:
       - id: semgrep
         name: "Rules of the architecture"
         args:
-          - --config=.semgrep/architecture.yml
+          - --config=semgrep/
           - --error
           - --metrics=off
           - --disable-version-check
           - --skip-unknown-extensions
         types_or: [python, pyi, javascript, jsx, ts, tsx, json]
         require_serial: true
-        exclude: '^\.semgrep/'
+        exclude: '^semgrep/'
 
       - id: semgrep
         alias: semgrep-rule-tests
         name: "The rules of the architecture catch what they should"
-        args: [--test, --strict, --metrics=off, --config=.semgrep/architecture.yml, .semgrep/architecture.py]
-        files: '^\.semgrep/'
+        args: [--test, --strict, --metrics=off, semgrep/]
+        files: '^semgrep/'
         pass_filenames: false
 
   - repo: local
