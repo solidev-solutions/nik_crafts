@@ -23,9 +23,6 @@ def create_taxes(company, taxes, *, in_use):
 			for row in template["taxes"]:
 				leave_number_to_its_owner(company, row["account_head"])
 
-	# ERPNext finds the group for input-tax accounts by its translated name, so it has to run in the
-	# language of the chart. For a new company that is the session's. For a company in use it is taken
-	# to be the site's: a company created in another language still gets a group of its own.
 	language = frappe.db.get_single_value("System Settings", "language") if in_use else None
 	with print_language(language):
 		from_detailed_data(company, taxes)

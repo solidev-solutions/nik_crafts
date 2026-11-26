@@ -1,5 +1,3 @@
-# An own DocType that is exempt from a rule is listed under that rule's paths.exclude, with its reason
-# in a comment. A DocType file is written by Frappe and has no room for a comment of its own.
 rules:
   - id: doctype-names-its-company
     languages: [json]
