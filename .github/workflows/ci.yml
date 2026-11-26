@@ -79,7 +79,6 @@ jobs:
           bench build
 
       - name: Validate Dependencies
-        # The version number of ERPNext on version-16-hotfix lags behind its releases.
         if: env.UPSTREAM_BRANCH == 'version-16'
         working-directory: /home/runner/frappe-bench
         run: bench validate-dependencies
@@ -124,7 +123,6 @@ jobs:
 
       - name: Build
         env:
-          # frappe_docker publishes its base images for version-16 only, not for version-16-hotfix.
           FRAPPE_BRANCH: version-16
           APPS_JSON: |
             [
