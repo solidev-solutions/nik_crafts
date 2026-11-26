@@ -11,6 +11,8 @@ NichtImKopf Crafts Community (`nik_crafts`) is business software for craft busin
 ## Making the change
 
 - Make the smallest correct change. Do not reformat, rename or move code you did not need to touch.
+- Do not guard against cases that cannot happen.
+- Do not add an abstraction before a second caller needs it.
 - Write code that needs no comment. Add one only where the code cannot say it itself: a reason that is not obvious, a limit, a workaround. A comment states the condition that holds today, never the way there.
 - What a tool can check becomes a check in `.pre-commit-config.yaml`, not a sentence in a file.
 - Everything in this repository is English. German reaches the interface through Frappe's translations.
