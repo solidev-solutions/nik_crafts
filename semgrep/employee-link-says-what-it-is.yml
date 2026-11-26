@@ -1,0 +1,11 @@
+rules:
+  - id: employee-link-says-what-it-is
+    languages: [json]
+    severity: HIGH
+    message: >-
+      A user permission on one's own employee restricts every link to Employee. A link that only
+      names a colleague ticks "Ignore User Permissions". A link that belongs to the person is listed
+      with its reason under this rule's paths.exclude.
+    patterns:
+      - pattern: '{..., "fieldtype": "Link", "options": "Employee", ...}'
+      - pattern-not: '{..., "ignore_user_permissions": 1, ...}'

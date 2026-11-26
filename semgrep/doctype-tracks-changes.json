@@ -1,0 +1,40 @@
+[
+ // ruleid: doctype-tracks-changes
+ {
+  "doctype": "DocType",
+  "fields": [
+   {
+    "fieldname": "company",
+    "fieldtype": "Link",
+    "options": "Company"
+   }
+  ],
+  "name": "NC Missing Everything",
+  "track_changes": 0
+ },
+ // ok: doctype-tracks-changes
+ {
+  "doctype": "DocType",
+  "fields": [
+   {
+    "fieldname": "company",
+    "fieldtype": "Link",
+    "options": "Company",
+    "reqd": 1
+   }
+  ],
+  "name": "NC Complete",
+  "track_changes": 1
+ },
+ // ok: doctype-tracks-changes
+ {
+  "doctype": "DocType",
+  "istable": 1,
+  "name": "NC Child Row"
+ },
+ // ok: doctype-tracks-changes
+ {
+  "doctype": "Customer",
+  "name": "Familie Gruber"
+ }
+]

@@ -35,7 +35,7 @@ packages = []
 [tool.ruff]
 line-length = 110
 target-version = "py314"
-extend-exclude = [".semgrep"]
+extend-exclude = ["semgrep"]
 
 [tool.ruff.lint]
 select = [
