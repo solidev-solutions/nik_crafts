@@ -1,5 +1,4 @@
 # semgrep tests a rule on architecture.py alone, so the test never sees a rule's paths.
-# A changed path is tried with a file planted in that place.
 rules:
   - id: database-in-repositories
     languages: [python]
@@ -34,9 +33,6 @@ rules:
           - metavariable-regex:
               metavariable: $METHOD
               regex: ^(db_set|db_get|db_insert|db_update|db_update_all|get_db_value|load_from_db|get_latest|update_child_table|update_children|update_single|deferred_insert|queue_action|_save|_submit|_cancel)$
-      # insert, save, submit, cancel and delete are names other objects use too. They count without
-      # an argument, with a keyword the document's method has, and insert with a single argument,
-      # which the insert of a list never has.
       - pattern: $DOC.insert()
       - pattern: $DOC.insert($ARGUMENT)
       - patterns:
@@ -77,8 +73,6 @@ rules:
       ERPNext's tables change only through the document: save, submit, cancel.
       A direct write names an own table as a plain string in the call ("NC ..."),
       and raw SQL and changes to a table's structure live in patches/.
-    # A write with the query builder or with db_set does not show its table.
-    # Both are reported by validation-bypass, whatever the table.
     patterns:
       - pattern-either:
           - pattern: frappe.db.$METHOD(...)
@@ -121,11 +115,6 @@ rules:
       bypass stands in repositories/ or nc_core/, and the line directly above it holds nothing but:
       # nosemgrep: permission-bypass -- <why it is needed>
     pattern-either:
-      # A read that never checks a right, such as frappe.get_all or frappe.db.get_value, is no switch.
-      # database-in-repositories keeps it in repositories/ and nc_core/.
-      #
-      # A switch is reported where it is set: as a keyword, on an object, under a key or as a parameter.
-      # ignore_share_permissions is left out: it makes has_permission stricter.
       - patterns:
           - pattern-either:
               - pattern: $CALL(..., $SWITCH=$VALUE, ...)
@@ -142,10 +131,6 @@ rules:
           - metavariable-regex:
               metavariable: $SWITCH
               regex: ^ignore_(?!share_permissions$)\w*perm\w*$
-      # ignore_permissions is the first parameter of insert, save and delete, so an argument
-      # without a name is reported, on another object too. rows.insert(0, row) takes two: with two,
-      # insert is reported only if the first is True, False or None. A string as the first
-      # argument stays quiet.
       - patterns:
           - pattern-either:
               - pattern: $DOC.insert($SWITCH)
@@ -165,8 +150,6 @@ rules:
           - pattern-not: requests.$METHOD(...)
           - pattern-not: $QUERY.into(...). ... .insert(...)
           - pattern-not-inside: $QUERY.insert(...). ... .run(...)
-      # delete_doc skips the check with for_reload, its fifth parameter, and with
-      # ignore_permissions, its sixth.
       - patterns:
           - pattern-either:
               - pattern: $MODULE.$DELETE(..., for_reload=$VALUE, ...)
@@ -174,7 +157,6 @@ rules:
           - metavariable-regex:
               metavariable: $DELETE
               regex: ^delete_doc(_if_exists)?$
-      # rename_doc skips it without validate, and with ignore_permissions, its sixth parameter.
       - patterns:
           - pattern: $OBJECT.$RENAME(..., $VALIDATE=$VALUE, ...)
           - metavariable-regex:
@@ -212,8 +194,6 @@ rules:
       and the line directly above it holds nothing but:
       # nosemgrep: validation-bypass -- <why it is needed>
     pattern-either:
-      # A switch is reported where it is set, as in permission-bypass. A save also skips checks
-      # while Frappe believes it runs an import or an installation.
       - patterns:
           - pattern-either:
               - pattern: $CALL(..., $SWITCH=$VALUE, ...)
@@ -247,7 +227,6 @@ rules:
           - metavariable-regex:
               metavariable: $WRITE
               regex: ^(set_value|set_single_value|delete|truncate|bulk_insert|bulk_update)$
-      # A write with the query builder is reported where it is built.
       - patterns:
           - pattern: frappe.qb.$WRITE(...)
           - metavariable-regex:
@@ -261,8 +240,6 @@ rules:
           - metavariable-regex:
               metavariable: $WRITE
               regex: ^(update|into|delete)$
-      # On a table or on a query kept in a variable, update, insert and delete are names of
-      # dict, list and document too. There run() tells the query apart.
       - patterns:
           - pattern: $QUERY.$WRITE(...). ... .run(...)
           - metavariable-regex:
@@ -271,8 +248,6 @@ rules:
           - pattern-not: frappe.qb.update(...). ... .run(...)
           - pattern-not: frappe.qb.into(...). ... .run(...)
           - pattern-not: frappe.qb.from_(...). ... .run(...)
-      # force skips the check for links and for_reload the controller's on_trash. A rename
-      # without validate skips every check of the rename.
       - patterns:
           - pattern: $OBJECT.$FUNCTION(..., $SWITCH=$VALUE, ...)
           - metavariable-regex:
@@ -281,7 +256,6 @@ rules:
           - metavariable-regex:
               metavariable: $SWITCH
               regex: ^(force|for_reload|validate|validate_rename)$
-      # force is the third parameter of delete_doc and of a document's rename, the fourth of rename_doc.
       - patterns:
           - pattern: $MODULE.$DELETE($DOCTYPE, $NAME, $FORCE, ...)
           - metavariable-regex:
@@ -356,8 +330,6 @@ rules:
                           "..."
                           frappe.has_permission(..., throw=True, ...)
                           ...
-              # A check for a named user, or one that runs only under a condition, says nothing about
-              # the caller. user is the fourth parameter.
               - patterns:
                   - pattern-either:
                       - pattern: |
@@ -378,7 +350,6 @@ rules:
                         - pattern: frappe.has_permission($DOCTYPE, $PTYPE, $DOC, $USER, ...)
                         - pattern: $CONDITION and frappe.has_permission(...)
                         - pattern: $CONDITION or frappe.has_permission(...)
-      # Used in any other way than as a decorator, whitelist hides the function and its first statement.
       - patterns:
           - pattern: frappe.whitelist
           - pattern-not-inside: |
@@ -411,7 +382,6 @@ rules:
           - metavariable-regex:
               metavariable: $THROW
               regex: ^throw(_permission_error)?$
-      # raise_exception is the third parameter of msgprint.
       - pattern: $MODULE.msgprint(..., raise_exception=$EXCEPTION, ...)
       - pattern: $MODULE.msgprint($MESSAGE, $TITLE, $EXCEPTION, ...)
       - pattern: raise frappe.$EXCEPTION(...)
@@ -454,8 +424,6 @@ rules:
       POST is for anything that changes data, for a read that takes a list, and for a controller method a
       form script calls, because frm.call sends POST. GET is for any other read. The reason: without
       methods Frappe also accepts GET, and what a GET request writes is rolled back without an error.
-    # The name is matched and not the call, so whitelist handed on without a call is reported too.
-    # Not seen: whitelist that reaches a file through an own module which imported it from frappe.
     patterns:
       - pattern: frappe.whitelist
       - pattern-not-inside: frappe.whitelist(..., methods=["GET"], ...)
