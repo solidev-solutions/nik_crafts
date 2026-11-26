@@ -1,0 +1,59 @@
+[
+ {
+  "doctype": "Role Profile",
+  "role_profile": "Mitarbeiter",
+  "roles": [{"role": "Employee"}, {"role": "Projects User"}]
+ },
+ {
+  "doctype": "Role Profile",
+  "role_profile": "Büro",
+  "roles": [
+   {"role": "Projects User"},
+   {"role": "Projects Manager"},
+   {"role": "Sales User"},
+   {"role": "Sales Manager"},
+   {"role": "Sales Master Manager"},
+   {"role": "Purchase User"},
+   {"role": "Purchase Manager"},
+   {"role": "Purchase Master Manager"},
+   {"role": "Stock User"},
+   {"role": "Stock Manager"},
+   {"role": "Item Manager"},
+   {"role": "Accounts User"},
+   {"role": "Accounts Manager"},
+   {"role": "HR User"},
+   {"role": "HR Manager"},
+   {"role": "Fleet Manager"},
+   {"role": "Employee"}
+  ]
+ },
+ {
+  "doctype": "Role Profile",
+  "role_profile": "Leitung",
+  "roles": [
+   {"role": "Projects User"},
+   {"role": "Projects Manager"},
+   {"role": "Sales User"},
+   {"role": "Sales Manager"},
+   {"role": "Sales Master Manager"},
+   {"role": "Purchase User"},
+   {"role": "Purchase Manager"},
+   {"role": "Purchase Master Manager"},
+   {"role": "Stock User"},
+   {"role": "Stock Manager"},
+   {"role": "Item Manager"},
+   {"role": "Accounts User"},
+   {"role": "Accounts Manager"},
+   {"role": "HR User"},
+   {"role": "HR Manager"},
+   {"role": "Fleet Manager"},
+   {"role": "Employee"},
+   {"role": "System Manager"}
+  ]
+ },
+ {
+  "doctype": "Role Profile",
+  "role_profile": "Projektleitung",
+  "roles": [{"role": "Projects Manager"}]
+ }
+]

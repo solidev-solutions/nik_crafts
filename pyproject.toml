@@ -48,6 +48,7 @@ select = [
     "RUF",
     "INP",
     "TID251",
+    "BLE001",
     "C901",
     "PLR0912",
     "PLR0915",

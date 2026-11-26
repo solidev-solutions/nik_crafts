@@ -1,0 +1,10 @@
+[
+ {"doctype": "User", "email": "lukas.berger@musterbetrieb.example", "first_name": "Lukas", "last_name": "Berger", "send_welcome_email": 0, "role_profiles": [{"role_profile": "Mitarbeiter"}]},
+ {"doctype": "User", "email": "sabine.wagner@musterbetrieb.example", "first_name": "Sabine", "last_name": "Wagner", "send_welcome_email": 0, "role_profiles": [{"role_profile": "Büro"}]},
+ {"doctype": "User", "email": "andrea.hofer@musterbetrieb.example", "first_name": "Andrea", "last_name": "Hofer", "send_welcome_email": 0, "role_profiles": [{"role_profile": "Leitung"}]},
+ {"doctype": "User", "email": "stefan.bauer@musterbetrieb.example", "first_name": "Stefan", "last_name": "Bauer", "send_welcome_email": 0, "role_profiles": [{"role_profile": "Mitarbeiter"}, {"role_profile": "Projektleitung"}]},
+ {"doctype": "Employee", "first_name": "Lukas", "last_name": "Berger", "gender": "Male", "date_of_birth": "1994-03-12", "date_of_joining": "2019-09-01", "company": "Musterbetrieb GmbH", "user_id": "lukas.berger@musterbetrieb.example"},
+ {"doctype": "Employee", "first_name": "Sabine", "last_name": "Wagner", "gender": "Female", "date_of_birth": "1981-06-30", "date_of_joining": "2012-02-01", "company": "Musterbetrieb GmbH", "user_id": "sabine.wagner@musterbetrieb.example", "create_user_permission": 0},
+ {"doctype": "Employee", "first_name": "Andrea", "last_name": "Hofer", "gender": "Female", "date_of_birth": "1975-11-04", "date_of_joining": "2005-04-01", "company": "Musterbetrieb GmbH", "user_id": "andrea.hofer@musterbetrieb.example", "create_user_permission": 0},
+ {"doctype": "Employee", "first_name": "Stefan", "last_name": "Bauer", "gender": "Male", "date_of_birth": "1988-08-21", "date_of_joining": "2015-03-02", "company": "Musterbetrieb GmbH", "user_id": "stefan.bauer@musterbetrieb.example"}
+]
