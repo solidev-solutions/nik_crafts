@@ -32,7 +32,6 @@ packages = []
 [tool.ruff]
 line-length = 110
 target-version = "py314"
-# The test file of the semgrep rules holds the code the rules must reject.
 extend-exclude = [".semgrep"]
 
 [tool.ruff.lint]
@@ -77,16 +76,10 @@ docstring-code-format = true
 root_package = "nik_crafts"
 include_external_packages = true
 
-# As a source, nc_core and engine are named with a wildcard, because import-linter stops at a module
-# that does not exist yet. The wildcard covers what lies inside the package, not its own __init__.py.
-# The pull request that creates one of the two packages names it without the wildcard.
-
 [[tool.importlinter.contracts]]
 name = "Features stay apart and build on nc_core, nc_core builds on engine"
 type = "layers"
 containers = ["nik_crafts"]
-# The feature modules stand in one line between patches and nc_core: "nc_projects | nc_times".
-# patches lies on top: the rules for data access and for a bypass leave it out, so nothing imports it.
 layers = [
     "patches",
     "(nc_core)",
@@ -106,7 +99,6 @@ broken_contract_guidance = "A feature reaches another feature only through its c
 name = "Inside a module imports point downwards"
 type = "layers"
 containers = ["nik_crafts.*"]
-# The first line holds the entry points: ours, and the folders Frappe calls into.
 layers = [
     "(doctype) | (api) | (hooks) | (contract) | (report) | (page) | (dashboard_chart_source) | (web_form) | (notification)",
     "(application)",
