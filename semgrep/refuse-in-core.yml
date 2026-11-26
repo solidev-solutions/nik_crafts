@@ -1,0 +1,22 @@
+rules:
+  - id: refuse-in-core
+    languages: [python]
+    severity: HIGH
+    message: Refuse through the function in nc_core/. frappe.throw and Frappe's exceptions are raised only there.
+    pattern-either:
+      - patterns:
+          - pattern-either:
+              - pattern: frappe.$THROW(...)
+              - pattern: frappe.utils.messages.$THROW(...)
+          - metavariable-regex:
+              metavariable: $THROW
+              regex: ^throw(_permission_error)?$
+      - pattern: $MODULE.msgprint(..., raise_exception=$EXCEPTION, ...)
+      - pattern: $MODULE.msgprint($MESSAGE, $TITLE, $EXCEPTION, ...)
+      - pattern: raise frappe.$EXCEPTION(...)
+      - pattern: raise frappe.$EXCEPTION
+      - pattern: raise frappe.exceptions.$EXCEPTION(...)
+      - pattern: raise frappe.exceptions.$EXCEPTION
+    paths:
+      exclude:
+        - /nik_crafts/nc_core
