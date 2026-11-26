@@ -17,7 +17,6 @@ repos:
         args: [--assume-in-merge]
       - id: check-ast
       - id: check-json
-        # A rule test carries its annotations as comments.
         exclude: '^\.semgrep/'
       - id: check-toml
       - id: check-yaml

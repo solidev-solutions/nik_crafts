@@ -24,7 +24,6 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # A business may install HRMS next to the app. The nightly run checks that both live together.
         hrms: ${{ fromJSON((github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && '[false, true]' || '[false]') }}
 
     env:

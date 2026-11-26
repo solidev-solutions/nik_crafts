@@ -76,10 +76,6 @@ docstring-code-format = true
 root_package = "nik_crafts"
 include_external_packages = true
 
-# As a source, engine is named with a wildcard, because import-linter stops at a module
-# that does not exist yet. The wildcard covers what lies inside the package, not its own __init__.py.
-# The pull request that creates the package names it without the wildcard.
-
 [[tool.importlinter.contracts]]
 name = "Features stay apart and build on nc_core, nc_core builds on engine"
 type = "layers"
