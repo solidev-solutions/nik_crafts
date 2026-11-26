@@ -26,8 +26,6 @@ def timesheet_conditions(user):
 def has_timesheet_permission(doc, user):
 	if may_change_employee_records(user):
 		return True
-	# A save is checked on the changed document, so it must also be the user's as stored, and so must
-	# the timesheet it amends.
 	stored = (stored_timesheet(doc.name), stored_timesheet(doc.amended_from))
 	return is_own_timesheet(doc, user) and all(not row or is_own_timesheet(row, user) for row in stored)
 
@@ -37,13 +35,11 @@ def stored_timesheet(name):
 
 
 def is_own_timesheet(timesheet, user):
-	# ERPNext gives a timesheet without an employee to whoever created it (Timesheet.set_user).
 	if timesheet.employee:
 		return frappe.db.get_value("Employee", timesheet.employee, "user_id") == user
 	return timesheet.owner == user
 
 
 def may_change_employee_records(user):
-	# Not frappe.has_permission: inside a hook its refusal would add a sentence about Employee to the
-	# message the user sees, and without a document one record shared with the user would make it true.
+	# Not frappe.has_permission: without a document one record shared with the user would make it true.
 	return bool(get_role_permissions("Employee", user=user).get("write"))

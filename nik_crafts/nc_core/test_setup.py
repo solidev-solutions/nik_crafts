@@ -86,7 +86,6 @@ class TestSetup(IntegrationTestCase):
 
 	def test_a_worker_may_not_upload_an_html_file(self):
 		self.addCleanup(frappe.db.rollback)
-		# Frappe checks the type only of a file that arrives with a request.
 		set_request(method="POST", path="/")
 		self.addCleanup(delattr, frappe.local, "request")
 		file = frappe.new_doc("File", file_name="seite.html", content="<p>Seite</p>", is_private=1)

@@ -12,12 +12,11 @@ OFFICE = "sabine.wagner@musterbetrieb.example"
 class TestOwnRecords(IntegrationTestCase):
 	def setUp(self):
 		super().setUp()
-		# Frappe caches the worker's User Permissions as read during the test, and the rollback keeps the cache.
 		self.addCleanup(frappe.cache.hdel, "user_permissions", WORKER)
 		self.addCleanup(frappe.db.rollback)
 		self.worker_record = frappe.db.get_value("Employee", {"user_id": WORKER})
 		self.colleague_record = frappe.db.get_value("Employee", {"user_id": COLLEAGUE})
-		# The worker's User Permission would hide the colleague too. Without it, only the hooks do.
+		# The worker's User Permission would hide the colleague too.
 		frappe.get_doc("User Permission", {"user": WORKER, "allow": "Employee"}).delete()
 
 	def test_a_worker_sees_only_their_own_employee_record(self):
