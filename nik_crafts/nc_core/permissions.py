@@ -18,7 +18,7 @@ def timesheet_conditions(user):
 	if may_change_employee_records(user):
 		return ""
 	user = frappe.db.escape(user)
-	booked_for = f"`tabTimesheet`.`employee` in (select `name` from `tabEmployee` where `user_id` = {user})"
+	booked_for = f"`tabTimesheet`.`employee` in (select `name` from `tabEmployee` where `user_id` = {user})"  # noqa: S608 -- the hook returns SQL text, and its one value is escaped
 	booked_by = f"ifnull(`tabTimesheet`.`employee`, '') = '' and `tabTimesheet`.`owner` = {user}"
 	return f"({booked_for} or ({booked_by}))"
 
